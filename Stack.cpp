@@ -1,69 +1,72 @@
 #include<bits/stdc++.h>
 using namespace std;
-struct Node{
-    int Value;
-    Node* Next;
+//Se declara el nodo funcional para la pila
+struct Nodo{
+    //Valor del nodo
+    int Valor;
+    //Apuntador al nodo siguiente
+    Nodo* Sig;
 };
-struct Queue{
-    Node* Head=nullptr;
-    Node* Front=nullptr;
-    Node* End=nullptr;
-    int Size=0;
+struct Pila{
+    //Se declara la cabeza
+    Nodo* nodo=nullptr;
+    //Se declara el tamaño
+    int size=0;
+    //Se pregunta si está vacia la pila
     bool Empty(){
-        if(Head==nullptr) return true;
+        if(size==0) return true;
         return false;
     }
-    int PFront(){
-        return Front->Value;
+    //Regresa el último valor agregado
+    int tope(){
+        return nodo->Valor;
     }
-    int PEnd(){
-        return End->Value;
-    }
-    void Push(int x){
-        Node* tmp=new Node();
-        tmp->Value=x;
-        if(Head==nullptr){
-            Head=tmp;
-            Front=Head;
-            End=Head;
+    //Agrega un elemento
+    void push(int x){
+        //Se aumenta en 1 el tamaño de la pila
+        size++;
+        //Se crea un nodo auxiliar
+        Nodo* tmp=new Nodo();
+        //Se asigna al valor del temporal x
+        tmp->Valor=x;
+        //Se pregunta si el nodo cabeza está vacío
+        if(nodo==nullptr){
+            //Si es el caso se asigna a la cabeza el nodo temporal, para crear esta misma
+            nodo = tmp;
         }else{
-            Size++;
-            Node* move=Head;
-            Head=tmp;
-            Head->Next=move;
-            End=Head;
+            //En caso contrario se crea un nodo llamado "move" para no perder de vista al nodo original
+            //o la "head", y a nodo o sea la "head", se asigna el valor de tmp, esto con el fin de 
+            //que el nodo siguiente sea move, así desplazamos la cabeza para abajo
+            //Y el nuevo valor se vuelve la cabeza
+            Nodo* move=nodo;
+            nodo=tmp;
+            nodo->Sig=move;
             move=nullptr;
         }
     }
-    void Pop(){
-        if(Head!=nullptr){
-            Size--;
-            if(Front==Head && Front==End){
-                Front=nullptr;
-                End=nullptr;
-                delete(Head);
-            }else{
-                Node* tmp = Front;
-                Node* move = Head;
-                while(move->Next!=tmp){
-                    move=move->Next;
-                }
-                Front=move;
-                move=nullptr;
-                delete(tmp);
-            }
-            
+    //Funcion para elimiar el head
+    void pop(){
+        //Se pregunta si está nulo
+        if(nodo!=nullptr){
+            size--;
+            //Se crea un nodo temporal y se apunta a la cabeza
+            Nodo* tmp=nodo;
+            //Ahora el nodo original, pasa a ser el valor de siguiente y con tmp, borramos el original
+            nodo=nodo->Sig;
+            delete(tmp);
         }
     }
 };
 int main(){
-    Queue data;
-    for(int i=1;i<=150;i++){
-        data.Push(i);
-        cout<<data.PEnd()<<endl;
+    Pila test;
+    for(int i=0;i<5;i++){
+        test.push(i);
     }
-    cout<<data.PFront()<<endl;
-    data.Pop();
-    for(int i=0;i<15;i++) data.Pop();
-    cout<<data.Size<<" "<<data.PFront();
+    cout<<test.tope()<<" "<<test.size<<endl;
+    test.pop();
+    cout<<test.tope()<<" "<<test.size<<endl;
+    while(!test.Empty()){
+        cout<<test.tope()<<" "<<test.size<<endl;
+        test.pop();
+    }
 }
