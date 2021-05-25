@@ -52,7 +52,6 @@ struct Queue{
                 move=nullptr;
                 delete(tmp);
             }
-            
         }
     }
 };
