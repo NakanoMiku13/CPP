@@ -79,9 +79,9 @@ struct LinkedList {
     //A function to print the linkedlist
     auto PrintList()->void{
         while(!IsEmpty()){
-        PrintHeader();
-        Pop();
-    }
+            PrintHeader();
+            Pop();
+        }
     }
 };
 auto main()-> int {
