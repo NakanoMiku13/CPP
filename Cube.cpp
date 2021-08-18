@@ -9,7 +9,7 @@ auto Fill()->void{
     for(int i=0;i<5;i++){
         for(int j=0;j<5;j++){
             for(int k=0;k<5;k++){
-                Array[i][j][k]=rand()%10000;
+                Array[i][j][k]=rand()%100;
             }
         }
     }
@@ -29,7 +29,7 @@ auto SumTopBottomRow(int y, int z)->int{
     size_t Sum=0;
     for(int i=0;i<5;i++){
         //Here we just have to travel in the X coordinate of the cube to make the addition of the rows
-        Sum+=Array[i][y][z];
+        Sum+=*(*(*(Array+i)+y)+z);
     }
     return (int)Sum;
 }
@@ -38,7 +38,7 @@ auto SumColLeftRight(int x,int z)->int{
     size_t Sum=0;
     for(int i=0;i<5;i++){
         //You only have to travel in the Y coordinate of the cube to get the result
-        Sum+=Array[x][i][z];
+        Sum+=*(*(*(Array+x)+i)+z);
     }
     return (int)Sum;
 }
@@ -47,7 +47,7 @@ auto SumRowLeftRight(int x, int y)->int{
     size_t Sum=0;
     for(int i=0;i<5;i++){
         //You only have to travel in the Z coordinate
-        Sum+=Array[x][y][i];
+        Sum+=*(*(*(Array+x)+y)+i);
     }
     return (int)Sum;
 }
@@ -55,16 +55,15 @@ auto SumRowLeftRight(int x, int y)->int{
 auto SumColFrontBack(int x,int z)->int{
     size_t Sum = 0;
     for(int i=0;i<5;i++){
-        Sum+=Array[x][i][z];
+        Sum+=*(*(*(Array+x)+i)+z);
     }
-    cout<<endl;
     return (int)Sum;
 }
 //Function that make the addition othe rows from the front or back of the cube
 auto SumRowFrontBack(int y,int z)->int{
     size_t Sum = 0;
     for(int i=0;i<5;i++){
-        Sum+=Array[i][y][z];
+        Sum+=*(*(*(Array+i)+y)+z);
     }
     return (int)Sum;
 }
@@ -75,6 +74,7 @@ auto FaceFront()->int{
         for(int j=0;j<5;j++){
             //You only have to travel as a simple matrix
             Sum+=Array[i][j][0];
+            Sum+=*(*(*(Array+i)+j)+0);
         }
     }
     return (int)Sum;
@@ -85,7 +85,7 @@ auto FaceRight()->int{
     for(int i=0;i<5;i++){
         for(int j=0;j<5;j++){
             //You have to set the cursor on the last X position, and then you travel like another matrix
-            Sum+=Array[5][i][j];
+            Sum+=*(*(*(Array+5)+i)+j);
         }
     }
     return (int)Sum;
@@ -96,7 +96,7 @@ auto FaceLeft()->int{
     for(int i=0;i<5;i++){
         for(int j=0;j<5;j++){
             //You have to travel from the initial X position to the Z last position
-            Sum+=Array[0][i][5-j];
+            Sum+=*(*(*(Array+0)+i)+(5-j));
         }
     }
     return (int)Sum;
@@ -108,7 +108,7 @@ auto FaceBack()->int{
         for(int j=0;j<5;j++){
             for(int k=0;k<5;k++){
                 //Is the opposite of the front face code
-                Sum+=Array[5-i][j][5-k];
+                Sum+=*(*(*(Array+(5-i))+j)+(5-k));
             }
         }
     }
@@ -120,7 +120,7 @@ auto FaceTop()->int{
     for(int i=0;i<5;i++){
         for(int j=0;j<5;j++){
             //You only have to travel in the top, you must not have to move in the Y coordinate
-            Sum+=Array[i][0][j];
+            Sum+=*(*(*(Array+i)+0)+j);
         }
     }
     return (int)Sum;
@@ -131,7 +131,7 @@ auto FaceBottom()->int{
     for(int i=0;i<5;i++){
         for(int j=0;j<5;j++){
             //The same as the last function, but in this case, you are in the last position of Y coordinate.
-            Sum+=Array[i][5][j];
+            Sum+=*(*(*(Array+i)+5)+j);
         }
     }
     return (int)Sum;
@@ -205,6 +205,17 @@ auto Menu()->void{
     cin>>x;
     result = SumMenu(x);
     cout<<"The result is: "<<result<<endl;
+}
+auto Print()->void{
+    for(int i=0;i<5;i++){
+        for(int j=0;j<5;j++){
+            cout<<endl;
+            for(int k=0;k<5;k++){
+                cout<<Array[i][j][k]<<" ";
+            }
+        }
+        cout<<endl;
+    }
 }
 //Main Function
 auto main()-> int {
