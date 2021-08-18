@@ -21,6 +21,7 @@ auto SumTopBottomCol(int x,int y)->int{
     for(int i=0;i<5;i++){
         //In this case we only have to travel in the Z coordinate just for add the top or bottom values
         Sum+=Array[x][y][5-i];
+        Sum+=*(*(*(Array+x)+y)+(5-i));
     }
     return (int)Sum;
 }
