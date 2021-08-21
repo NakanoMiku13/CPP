@@ -1,9 +1,312 @@
 //Code by NakanoMiku13
 //Check more codes on http://github.com/NakanoMiku13/
-//Cube 1.0
+//Cube 2.0
 #include<bits/stdc++.h>
+#include<graphics.h>
+#include<conio.h>
 using namespace std;
 int Array[5][5][5];
+int gmode,gdriver=DETECT;
+auto InitGraphMode()->void{
+    initgraph(&gdriver,&gmode,"");
+}
+auto CloseGraph()->void{
+    getch();
+    closegraph();
+}
+auto PrintError()->void{
+    InitGraphMode();
+    setcolor(RED);
+    outtextxy(300,300,"Error... try again.");
+    CloseGraph();
+}
+auto PrintFace()->void{
+    for(int i=0,top=10,bottom=60;i<5;i++,top+=60,bottom+=60){
+        for(int j=0,right=60,left=10;j<5;j++,right+=60,left+=60){
+            rectangle(left,top,right,bottom);
+        }
+    }
+}
+auto PrintFaceBackFront(int Result,int x)->void{
+    InitGraphMode();
+    PrintFace();
+    char Number[5];
+    for(int i=0,y1=32;i<5;i++,y1+=60){
+        int tmp;
+        for(int k=0,x1=-32;k<5;k++){
+            tmp= (int)*(*(*(Array+x)+i)+(4-k));
+            sprintf(Number,"%d",tmp);
+            if(tmp>9 and tmp<100){
+                x1+=59;
+            }else if(tmp>99){
+                x1+=58;
+            }else{
+                x1+=60;
+            }
+            setcolor(GREEN);
+            outtextxy(x1,y1,Number);
+        }
+    }
+    char Text[1000];
+    sprintf(Text,"The result of the addition is: %d\nPress any key to continue...\n",Result);
+    outtextxy(10,350,Text);
+    CloseGraph();
+}
+auto PrintColFrontBack(int Result,int x,int z)->void{
+    InitGraphMode();
+    PrintFace();
+    char Number[5];
+    int* number;
+    for(int i=0,j=0;i<5;i++,j++){
+        *(number+j)=*(*(*(Array+x)+i)+z);
+    }
+    for(int i=0,y1=32;i<5;i++,y1+=60){
+        int tmp;
+        for(int k=0,x1=-32;k<5;k++){
+            tmp= (int)*(*(*(Array+x)+i)+k);
+            sprintf(Number,"%d",tmp);
+            if(tmp>9 and tmp<100){
+                x1+=59;
+            }else if(tmp>99){
+                x1+=58;
+            }else{
+                x1+=60;
+            }
+            if(tmp==*(number+k)){
+                setcolor(GREEN);
+            }else{
+                setcolor(WHITE);
+            }
+            outtextxy(x1,y1,Number);
+        }
+    }
+    char Text[1000];
+    setcolor(WHITE);
+    sprintf(Text,"The result of the addition is: %d\nPress any key to continue...\n",Result);
+    outtextxy(10,350,Text);
+    CloseGraph();
+}
+auto PrintRowFrontBack(int Result,int x,int y)->void{
+    InitGraphMode();
+    PrintFace();
+    char Number[5];
+    int* number;
+    number=(int*)malloc(sizeof(int)*10);
+    for(int i=0;i<5;i++){
+        *(number+i)=*(*(*(Array+x)+y)+i);
+    }
+    for(int i=0,y1=32;i<5;i++,y1+=60){
+        int tmp;
+        for(int k=0,x1=-32;k<5;k++){
+            tmp= (int)*(*(*(Array+x)+i)+(5-k));
+            sprintf(Number,"%d",tmp);
+            if(tmp>9 and tmp<100){
+                x1+=59;
+            }else if(tmp>99){
+                x1+=58;
+            }else{
+                x1+=60;
+            }
+            if(tmp==*(number+k)){
+                setcolor(GREEN);
+            }else{
+                setcolor(WHITE);
+            }
+            outtextxy(x1,y1,Number);
+        }
+    }
+    char Text[1000];
+    setcolor(WHITE);
+    sprintf(Text,"The result of the addition is: %d\nPress any key to continue...\n",Result);
+    outtextxy(10,350,Text);
+    CloseGraph();
+}
+auto PrintFaceLeftRight(int Result,int z)->void{
+    InitGraphMode();
+    PrintFace();
+    char Number[5];
+    for(int i=0,y1=32;i<5;i++,y1+=60){
+        int tmp;
+        for(int k=0,x1=-32;k<5;k++){
+            tmp= (int)*(*(*(Array+i)+k)+z);
+            sprintf(Number,"%d",tmp);
+            if(tmp>9 and tmp<100){
+                x1+=59;
+            }else if(tmp>99){
+                x1+=58;
+            }else{
+                x1+=60;
+            }
+            outtextxy(x1,y1,Number);
+        }
+    }
+    char Text[1000];
+    sprintf(Text,"The result of the addition is: %d\nPress any key to continue...\n",Result);
+    outtextxy(10,350,Text);
+    CloseGraph();
+}
+auto PrintRowLeftRight(int Result, int y,int z)->void{
+    InitGraphMode();
+    PrintFace();
+    char Number[5];
+    int* number;
+    number=(int*)malloc(sizeof(int)*10);
+    for(int i=0;i<5;i++){
+        *(number+i)=*(*(*(Array+i)+y)+z);
+    }
+    for(int i=0,y1=32;i<5;i++,y1+=60){
+        int tmp;
+        for(int k=0,x1=-32;k<5;k++){
+            tmp= (int)*(*(*(Array+i)+k)+z);
+            sprintf(Number,"%d",tmp);
+            if(tmp>9 and tmp<100){
+                x1+=59;
+            }else if(tmp>99){
+                x1+=58;
+            }else{
+                x1+=60;
+            }
+            if(tmp==*(number+k)){
+                setcolor(GREEN);
+            }else{
+                setcolor(WHITE);
+            }
+            outtextxy(x1,y1,Number);
+        }
+    }
+    char Text[1000];
+    setcolor(WHITE);
+    sprintf(Text,"The result of the addition is: %d\nPress any key to continue...\n",Result);
+    outtextxy(10,350,Text);
+    CloseGraph();
+}
+auto PrintColLeftRight(int Result,int x,int z)->void{
+    InitGraphMode();
+    PrintFace();
+    char Number[5];
+    int* number;
+    number=(int*)malloc(sizeof(int)*10);
+    for(int i=0;i<5;i++){
+        *(number+i)=*(*(*(Array+x)+i)+z);
+    }
+    for(int i=0,y1=32;i<5;i++,y1+=60){
+        int tmp;
+        for(int k=0,x1=-32;k<5;k++){
+            tmp= (int)*(*(*(Array+x)+i)+k);
+            sprintf(Number,"%d",tmp);
+            if(tmp>9 and tmp<100){
+                x1+=59;
+            }else if(tmp>99){
+                x1+=58;
+            }else{
+                x1+=60;
+            }
+            if(tmp==*(number+k)){
+                setcolor(GREEN);
+            }else{
+                setcolor(WHITE);
+            }
+            outtextxy(x1,y1,Number);
+        }
+    }
+    char Text[1000];
+    setcolor(WHITE);
+    sprintf(Text,"The result of the addition is: %d\nPress any key to continue...\n",Result);
+    outtextxy(10,350,Text);
+    CloseGraph();
+}
+auto PrintFaceTopBottom(int Result,int y)->void{
+    InitGraphMode();
+    PrintFace();
+    char Number[5];
+    for(int i=0,y1=32;i<5;i++,y1+=60){
+        int tmp;
+        for(int k=0,x1=-32;k<5;k++){
+            tmp= (int)*(*(*(Array+(4-i)+y)+(5-k)));
+            sprintf(Number,"%d",tmp);
+            if(tmp>9 and tmp<100){
+                x1+=59;
+            }else if(tmp>99){
+                x1+=58;
+            }else{
+                x1+=60;
+            }
+            outtextxy(x1,y1,Number);
+        }
+    }
+    char Text[1000];
+    sprintf(Text,"The result of the addition is: %d\nPress any key to continue...\n",Result);
+    outtextxy(10,350,Text);
+    CloseGraph();
+}
+auto PrintRowTopBottom(int Result,int x,int y)->void{
+    InitGraphMode();
+    PrintFace();
+    char Number[5];
+    int* number;
+    number=(int*)malloc(sizeof(int)*10);
+    for(int i=0;i<5;i++){
+        *(number+i) =*(*(*(Array+x)+y)+(5-i));
+    }
+    for(int i=0,y1=32;i<5;i++,y1+=60){
+        int tmp;
+        for(int k=0,x1=-32;k<5;k++){
+            tmp= (int)*(*(*(Array+(4-i)+y)+(5-k)));
+            sprintf(Number,"%d",tmp);
+            if(tmp>9 and tmp<100){
+                x1+=59;
+            }else if(tmp>99){
+                x1+=58;
+            }else{
+                x1+=60;
+            }
+            if(tmp==*(number+k)){
+                setcolor(GREEN);
+            }else{
+                setcolor(WHITE);
+            }
+            outtextxy(x1,y1,Number);
+        }
+    }
+    char Text[1000];
+    sprintf(Text,"The result of the addition is: %d\nPress any key to continue...\n",Result);
+    outtextxy(10,350,Text);
+    CloseGraph();
+}
+auto PrintColTopBottom(int Result,int y,int z)->void{
+    InitGraphMode();
+    PrintFace();
+    char Number[5];
+    int* number;
+    number=(int*)malloc(sizeof(int)*10);
+    for(int i=0;i<5;i++){
+        *(number+i) =*(*(*(Array+(4-i))+y)+z);
+    }
+    for(int i=0,y1=32;i<5;i++,y1+=60){
+        int tmp;
+        for(int k=0,x1=-32;k<5;k++){
+            tmp= (int)*(*(*(Array+(5-i)+y)+(5-k)));
+            sprintf(Number,"%d",tmp);
+            if(tmp>9 and tmp<100){
+                x1+=59;
+            }else if(tmp>99){
+                x1+=58;
+            }else{
+                x1+=60;
+            }
+            if(tmp==*(number+k)){
+                setcolor(GREEN);
+            }else{
+                setcolor(WHITE);
+            }
+            outtextxy(x1,y1,Number);
+        }
+    }
+    char Text[1000];
+    sprintf(Text,"The result of the addition is: %d\nPress any key to continue...\n",Result);
+    outtextxy(10,350,Text);
+    CloseGraph();
+}
 //This function fills all the array with random numbers between 0 and 10k
 auto Fill()->void{
     for(int i=0;i<5;i++){
@@ -20,6 +323,7 @@ auto SumTopBottomCol(int x,int y)->int{
     size_t Sum=0;
     for(int i=0;i<5;i++){
         //In this case we only have to travel in the Z coordinate just for add the top or bottom values
+        //This is equal to Sum+=Array[x][y][5-i]
         Sum+=*(*(*(Array+x)+y)+(5-i));
     }
     return (int)Sum;
@@ -34,7 +338,7 @@ auto SumTopBottomRow(int y, int z)->int{
     return (int)Sum;
 }
 //Function to add the the left or right columns of the cube
-auto SumColLeftRight(int x,int z)->int{
+auto SumColLeftRightFrontBack(int x,int z)->int{
     size_t Sum=0;
     for(int i=0;i<5;i++){
         //You only have to travel in the Y coordinate of the cube to get the result
@@ -43,27 +347,19 @@ auto SumColLeftRight(int x,int z)->int{
     return (int)Sum;
 }
 //Function to add the left or right rows of the cube
-auto SumRowLeftRight(int x, int y)->int{
+auto SumRowLeftRight(int y, int z)->int{
     size_t Sum=0;
     for(int i=0;i<5;i++){
         //You only have to travel in the Z coordinate
-        Sum+=*(*(*(Array+x)+y)+i);
-    }
-    return (int)Sum;
-}
-//Function that add the Front and Back values, both functions are the same (SumColFrontBack and SumColLeftRight), I just add it to have it clear
-auto SumColFrontBack(int x,int z)->int{
-    size_t Sum = 0;
-    for(int i=0;i<5;i++){
-        Sum+=*(*(*(Array+x)+i)+z);
+        Sum+=*(*(*(Array+i)+y)+z);
     }
     return (int)Sum;
 }
 //Function that make the addition othe rows from the front or back of the cube
-auto SumRowFrontBack(int y,int z)->int{
+auto SumRowFrontBack(int x,int y)->int{
     size_t Sum = 0;
     for(int i=0;i<5;i++){
-        Sum+=*(*(*(Array+i)+y)+z);
+        Sum+=*(*(*(Array+x)+y)+i);
     }
     return (int)Sum;
 }
@@ -139,62 +435,179 @@ auto FaceBottom()->int{
 //Main menu to attach all the Face Addition to make it more accessible, you only have to give the number of the face
 auto SumFaceMenu(int face)->int{
     switch(face){
-        case 1: return FaceFront(); break;
-        case 2: return FaceRight(); break;
-        case 3: return FaceLeft(); break;
-        case 4: return FaceBack(); break;
-        case 5: return FaceTop(); break;
-        case 6: return FaceBottom(); break;
-        default: return 0; break;
+        case 1:
+            return FaceFront();
+            break;
+        case 2:
+            return FaceRight();
+            break;
+        case 3:
+            return FaceLeft();
+            break;
+        case 4:
+            return FaceBack();
+            break;
+        case 5:
+            return FaceTop();
+            break;
+        case 6:
+            return FaceBottom();
+            break;
+        default:
+            PrintError();
+            break;
     }
 }
 //Main menu where you make all the decitions of the program, if you want to add the top face, or just a col or row, here you choose.
-auto SumMenu(int face)->int{
+auto SumMenu(int face)->void{
     int option,x,y,z;
     switch(face) {
-        case 1: cout<<"Front Face:\n1) Col Sum\n2) Row sum\n3) Face sum\n"; cin>>option; 
+        case 1:
+            cout<<"Front Face:\n1) Col Sum\n2) Row sum\n3) Face sum\n"; 
+            cin>>option;
             switch(option){
-                case 1: cout<<"Type the X col position and Z col position:\n"; cin>>x>>z; return SumColFrontBack(x,z); break;
-                case 2: cout<<"Type the Y row position and Z row position:\n"; cin>>y>>z; return SumRowFrontBack(y,z); break;
-                case 3: return SumFaceMenu(1);
-                default: return -1;
-            } break;
-        case 2: cout<<"Right Face:\n1) Col Sum\n2) Row sum\n3 Face sum\n"; cin>>option; 
+                case 1:
+                    cout<<"Type the X col position and Z col position:\n"; 
+                    cin>>x>>z; 
+                    PrintColFrontBack(SumColLeftRightFrontBack(x,z),x,z); 
+                    break;
+                case 2:
+                    cout<<"Type the X row position and Y row position:\n"; 
+                    cin>>x>>y; 
+                    PrintRowFrontBack(SumRowFrontBack(x,y),x,y); 
+                    break;
+                case 3:
+                    cout<<"Type the front face number that you want to see:\n"; 
+                    cin>>x;
+                    PrintFaceBackFront(SumFaceMenu(1),x); 
+                    break;
+                default: 
+                    PrintError(); 
+                    break;
+            } 
+        break;
+        case 2:
+            cout<<"Right Face:\n1) Col Sum\n2) Row sum\n3 Face sum\n"; 
+            cin>>option;
             switch(option){
-                case 1: cout<<"Type the X col position and Z col position:\n"; cin>>x>>z; return SumColLeftRight(x,z); break;
-                case 2: cout<<"Type the X row position and Y row position:\n"; cin>>x>>y; return SumRowLeftRight(x,y); break;
-                case 3: return SumFaceMenu(2); break;
-                default: return -1;
+                case 1:
+                    cout<<"Type the X col position and Z col position:\n"; 
+                    cin>>x>>z; 
+                    PrintColLeftRight(SumColLeftRightFrontBack(x,z),x,z); 
+                    break;
+                case 2:
+                    cout<<"Type the Y row position and Z row position:\n"; 
+                    cin>>y>>z; 
+                    PrintRowLeftRight(SumRowLeftRight(y,z),y,z); 
+                    break;
+                case 3:
+                    cout<<"Type the Right face number that you want to see:\n"; 
+                    cin>>z;
+                    PrintFaceLeftRight(SumFaceMenu(2),z); 
+                    break;
+                default: 
+                    PrintError(); 
+                    break;
             }
-        case 3: cout<<"Left Face:\n1) Col Sum\n2) Row sum\n3 Face sum\n"; cin>>option; 
+        break;
+        case 3:
+            cout<<"Left Face:\n1) Col Sum\n2) Row sum\n3 Face sum\n"; 
+            cin>>option;
             switch(option){
-                case 1: cout<<"Type the X col position and Z col position:\n"; cin>>x>>z; return SumColLeftRight(x,z); break;
-                case 2: cout<<"Type the X row position and Y row position:\n"; cin>>x>>y; return SumRowLeftRight(x,y); break;
-                case 3: return SumFaceMenu(3); break;
-                default: return -1;
+                case 1:
+                    cout<<"Type the X col position and Z col position:\n"; 
+                    cin>>x>>z; 
+                    PrintColLeftRight(SumColLeftRightFrontBack(x,z),x,z); 
+                    break;
+                case 2:
+                    cout<<"Type the Y row position and Z row position:\n"; 
+                    cin>>y>>z; 
+                    PrintRowLeftRight(SumRowLeftRight(y,z),y,z); 
+                    break;
+                case 3:
+                    cout<<"Type the Left face number that you want to see:\n"; 
+                    cin>>z;
+                    PrintFaceLeftRight(SumFaceMenu(2),z); 
+                    break;
+                default: 
+                    PrintError(); 
+                    break;
             }
-        case 4: cout<<"Top Face:\n1) Col Sum\n2) Row sum\n3 Face sum\n"; cin>>option; 
+        break;
+        case 4:
+            cout<<"Top Face:\n1) Col Sum\n2) Row sum\n3 Face sum\n"; 
+            cin>>option;
             switch(option){
-                case 1: cout<<"Type the X col position and Y col position:\n"; cin>>x>>y; return SumTopBottomCol(x,y); break;
-                case 2: cout<<"Type the Y row position and Z row position:\n"; cin>>y>>z; return SumTopBottomRow(y,z); break;
-                case 3: return SumFaceMenu(4); break;
-                default: return -1;
+                case 1:
+                    cout<<"Type the X col position and Y col position:\n"; 
+                    cin>>x>>y;
+                    PrintColTopBottom(SumTopBottomCol(x,y),x,y); 
+                    break;
+                case 2:
+                    cout<<"Type the Y row position and Z row position:\n"; 
+                    cin>>y>>z;
+                    PrintRowTopBottom(SumTopBottomRow(y,z),y,z); 
+                    break;
+                case 3:
+                    cout<<"Type the Top face number that you want to see:\n"; 
+                    cin>>y;
+                    PrintFaceTopBottom(SumFaceMenu(4),y); 
+                    break;
+                default: 
+                    PrintError(); 
+                    break;
             }
-        case 5: cout<<"Bottom Face:\n1) Col Sum\n2) Row sum\n3 Face sum\n"; cin>>option; 
+        break;
+        case 5:
+            cout<<"Bottom Face:\n1) Col Sum\n2) Row sum\n3 Face sum\n"; 
+            cin>>option;
             switch(option){
-                case 1: cout<<"Type the X col position and Y col position:\n"; cin>>x>>y; return SumTopBottomCol(x,y); break;
-                case 2: cout<<"Type the Y row position and Z row position:\n"; cin>>y>>z; return SumTopBottomRow(y,z); break;
-                case 3: return SumFaceMenu(5); break;
-                default: return -1;
+                case 1:
+                    cout<<"Type the X col position and Y col position:\n"; 
+                    cin>>x>>y;
+                    PrintColTopBottom(SumTopBottomCol(x,y),x,y); 
+                    break;
+                case 2:
+                    cout<<"Type the Y row position and Z row position:\n"; 
+                    cin>>y>>z;
+                    PrintRowTopBottom(SumTopBottomRow(y,z),y,z); 
+                    break;
+                case 3:
+                    cout<<"Type the Bottom face number that you want to see:\n"; 
+                    cin>>y;
+                    PrintFaceTopBottom(SumFaceMenu(4),y); 
+                    break;
+                default: 
+                    PrintError(); 
+                    break;
             }
-        case 6: cout<<"Back Face:\n1) Col Sum\n2) Row sum\n3 Face sum\n"; cin>>option; 
+        break;
+        case 6:
+            cout<<"Back Face:\n1) Col Sum\n2) Row sum\n3 Face sum\n"; 
+            cin>>option; 
             switch(option){
-                case 1: cout<<"Type the X col position and Z col position:\n"; cin>>x>>z; return SumColFrontBack(x,z); break;
-                case 2: cout<<"Type the Y row position and Z row position:\n"; cin>>y>>z; return SumRowFrontBack(y,z); break;
-                case 3: return SumFaceMenu(6); break;
-                default: return -1;
+                case 1:
+                    cout<<"Type the X col position and Z col position:\n"; 
+                    cin>>x>>z; 
+                    PrintColFrontBack(SumColLeftRightFrontBack(x,z),x,z); 
+                    break;
+                case 2:
+                    cout<<"Type the X row position and Y row position:\n"; 
+                    cin>>x>>y; 
+                    PrintRowFrontBack(SumRowFrontBack(x,y),x,y); 
+                    break;
+                case 3:
+                    cout<<"Type the back face number that you want to see:\n"; 
+                    cin>>x;
+                    PrintFaceBackFront(SumFaceMenu(1),x); 
+                    break;
+                default: 
+                    PrintError(); 
+                    break;
             }
-        default: return -1;
+        break;
+        default: PrintError(); 
+        break;
     }
 }
 //Single function that invokes the menu and print the result, if the resul is equal to -1 that is an error, you have to choose again.
@@ -203,8 +616,7 @@ auto Menu()->void{
     int x,result;
     cout<<"1) Front Face\n2) Right face\n3)Left face\n4)Top face\n5)Bottom face\n6) Back face\n";
     cin>>x;
-    result = SumMenu(x);
-    cout<<"The result is: "<<result<<endl;
+    SumMenu(x);
 }
 auto Print()->void{
     for(int i=0;i<5;i++){
