@@ -222,7 +222,7 @@ auto PrintFaceTopBottom(int Result,int y)->void{
     for(int i=0,y1=32;i<5;i++,y1+=60){
         int tmp;
         for(int k=0,x1=-32;k<5;k++){
-            tmp= (int)*(*(*(Array+(4-i)+y)+(5-k)));
+            tmp= (int)*(*(*(Array+(5-i)+y)+(5-k)));
             sprintf(Number,"%d",tmp);
             if(tmp>9 and tmp<100){
                 x1+=59;
@@ -280,7 +280,7 @@ auto PrintColTopBottom(int Result,int y,int z)->void{
     int* number;
     number=(int*)malloc(sizeof(int)*10);
     for(int i=0;i<5;i++){
-        *(number+i) =*(*(*(Array+(4-i))+y)+z);
+        *(number+i) =*(*(*(Array+(5-i))+y)+z);
     }
     for(int i=0,y1=32;i<5;i++,y1+=60){
         int tmp;
@@ -631,5 +631,7 @@ auto Print()->void{
 }
 //Main Function
 auto main()-> int {
+    Menu();
+}
     Menu();
 }
