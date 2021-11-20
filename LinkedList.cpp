@@ -74,7 +74,7 @@ struct LinkedList {
     }
     //A simple function to print the header value
     auto PrintHeader()->void{
-        cout<<Header->Value<<endl;
+        cout<<Header->Value<<" ";
     }
     //A function to print the linkedlist
     auto PrintList()->void{
