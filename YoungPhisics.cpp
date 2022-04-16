@@ -11,14 +11,14 @@ auto sumX()->int{
 auto sumY()->int{
     int x=0;
     for(auto i=0;i<n;i++){
-        x+=matrix[i][1];        
+        x+=matrix[i][1];
     }
     return x;
 }
 auto sumZ()->int{
     int x=0;
     for(auto i=0;i<n;i++){
-        x+=matrix[i][2];        
+        x+=matrix[i][2];
     }
     return x;
 }
