@@ -1,5 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
+map<char,int> letters1,letters2;
 auto toLowerString(auto convert)->string{
     string newS="";
     for(auto i:convert) newS+=tolower(i);
@@ -10,11 +11,22 @@ auto comparison(auto a,auto b)->int{
     else{
         auto n = a.size();
         auto s=0,s2=0;
-        for(auto i:a) s+=(int)i;
-        for(auto i:b) s2+=(int)i;
-        cout<<s<<endl<<s2<<endl;
-        if(s>=s2) return 1;
-        else return -1;
+        for(auto i:a) letters1[i]++;
+        for(auto i:b) letters2[i]++;
+        for(auto i='a';i<='z';i++){
+            if(letters1[i]>0 && letters2[i]>0) {
+                s+=i;
+                s2+=i;
+            }
+            else{
+                if(letters1[i]==0 && letters2[i]==0) continue;
+                else if(letters1[i]>0 && letters2[i]==0) s+=i;
+                else s2+=i;
+            }
+        }
+        cout<<s<<" "<<s2<<endl;
+        if(s2>s) return -1;
+        return 1;
     }
 }
 auto main()->int{
@@ -24,5 +36,6 @@ auto main()->int{
     b=toLowerString(b);
     sort(a.begin(),a.end());
     sort(b.begin(),b.end());
-    cout<<comparison(a,b);
+    cout<<a<<" "<<b<<endl;
+    cout<<comparison(a,b)<<endl;
 }
