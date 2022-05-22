@@ -1,0 +1,15 @@
+call IE(0,'Mael','Garcia','Perez','h',36);
+call IE(1,'Estefania','Rodriguez','Ruiz','m',31);
+call IE(2,'Aida','Gonzalez','Lopez','h',17);
+call IE(3,'Ester','Ulrich','Diaz','m',11);
+call IE(4,'Roy','Diaz','Ulrich','m',22);
+call IE(5,'Fatima','Rodriguez','Lopez','m',9);
+call IE(6,'Lier','Gonzalez','Jimenez','h',2);
+call IE(7,'Tao','Jimenez','Ulrich','m',36);
+call IE(8,'Valeria','Ruiz','Martin','m',0);
+call IE(9,'Irati','Jimenez','Perez','h',3);
+call IE(10,'Telma','Lopez','Ulrich','h',35);
+call IE(11,'Ingrid','Gomez','Martin','m',20);
+call IE(12,'Inma','Jimenez','Sanchez','h',32);
+call IE(13,'Ester','Perez','Gonzalez','h',6);
+call IE(14,'Policarpo','Alvarez','Gomez','h',8);
