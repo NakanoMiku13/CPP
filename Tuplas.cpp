@@ -137,6 +137,7 @@ auto setBlock(auto section)->string{
             string ids="";
             ss>>ids;
             result+=ids;
+            cout<<ids<<endl;
             result+=',';
         }else
         if(Domain[1]=='N' and Domain[2]=='2'){
@@ -158,7 +159,7 @@ auto setBlock(auto section)->string{
                     }
                     i++;
                 }
-                int ran = rand()%values.size();
+                int ran = rand()%values.size()+1;
                 result+="'";
                 result+=values[ran];
                 result+="',";
@@ -177,7 +178,8 @@ auto setBlock(auto section)->string{
                 end=convertToNumber(num);
                 num="";
                 stringstream ss;
-                int rr=rand()% (ini+end);
+                int rr=ini+(rand()%(end-ini+1));
+                cout<<rr<<endl;
                 ss<<rr;
                 ss>>num;
                 result+=num;
@@ -263,7 +265,7 @@ auto main()->int{
     cin>>nomEsq;
     system("cls");
     int x;
-    cout<<"Tienes procedimiento almacenado?\nSi (1) No (2)";
+    cout<<"Tienes procedimiento almacenado?\nSi (1) No (2)\n";
     cin>>x;
     list<string> lista;
     if(x==1){
@@ -278,6 +280,7 @@ auto main()->int{
     }
     ofstream file;
     file.open("tuplas.txt",ios::out);
+    cout<<"dnd\n"; 
     if(file.fail()){
         cout<<"ERROR GUARDANDO ARCHIVO\n Imprimiendo tuplas...\n";
         for(auto i:lista){
@@ -288,5 +291,10 @@ auto main()->int{
             file<<i<<endl;
         }
         file.close();
+        for(auto i:lista){
+            cout<<i<<endl;
+        }
     }
+    system("pause");
+    return 0;
 }
