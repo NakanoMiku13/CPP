@@ -1,1 +1,1 @@
-insert into libro(idLibro,autor,npaginas) values (1,'Francisca',367),(2,'Romulo',150),(3,'Trini',397),(4,'Nael',443),(5,'Adel',723),(6,'Estefania',280),(7,'Estefania',703),(8,'Agueda',626),(9,'Adela',732),(10,'Roy',230),(11,'Úrsula',159);
+insert into Empleado(idPer,Nombre,ApPat) values (1,'Iris','Alonso'),(2,'Simeon','Sanchez'),(3,'Sidi','Fernandez'),(4,'Estefania','Lopez'),(5,'Gaia','Alvarez'),(6,'Sonia','Alonso'),(7,'Triana','Fernandez'),(8,'Agueda','Garcia'),(9,'Adonis','Diaz'),(10,'Adonis','Ulrich'),(11,'Sofia','Vanegas');
