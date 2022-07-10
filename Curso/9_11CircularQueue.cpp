@@ -1,56 +1,61 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 template<typename data>
 using pointer = data*;
 template<typename data>
 struct node{
     data value;
-    pointer<node> next;
+    pointer<node> prev,next;
     public:
-        node(data value): value{value},next{nullptr}{}
+        node(data value) : value{value},next{nullptr}{}
 };
 template<typename data>
-struct Queue{
+struct CQueue{
     pointer<node<data>> head,back;
     size_t size;
     public:
-        Queue(): head{nullptr},size{0}{}
+        CQueue(): head{nullptr},back{nullptr},size{0}{}
     auto empty()->bool{
-        return (not head or size<=0) ? true : false;
+        return (not head or not back or size <= 0) ? true : false;
     }
     auto push(data value){
         auto newNode = new node<data>(value);
         if(empty()) head = back = newNode;
         else{
-            auto tmp = back;
             back->next = newNode;
+            newNode->prev = back;
             back = newNode;
+            back->next = head;
+            head->prev = back;
         }
         size++;
     }
     auto pop(){
-        if(!empty()){
+        if(empty()) return;
+        else{
             auto tmp = head;
             head = head->next;
+            head->prev = back;
+            back->next = head;
             delete tmp;
+            size--;
         }
-        size--;
     }
     auto front()->data{
         return head->value;
     }
 };
 auto main()->int{
+    CQueue<int> circularQueues;
     int n,x;
-    Queue<int> colaSimple;
     cin>>n;
-    for( int i=0;i<n;i++){
+    for(auto i=0;i<n;i++){
         cin>>x;
-        colaSimple.push(x);
+        circularQueues.push(x);
     }
     cout<<endl;
-    while(!colaSimple.empty()){
-        cout<<colaSimple.front()<<endl;
-        colaSimple.pop();
+    while(!circularQueues.empty()){
+        cout<<circularQueues.front()<<endl;
+        circularQueues.pop();
     }
 }

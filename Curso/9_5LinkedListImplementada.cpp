@@ -37,6 +37,7 @@ struct LinkedList{
             head = back = newNode;
             back->prev = head;
         }else{
+            head->prev = newNode;
             auto tmp = head;
             head = newNode;
             head->next = tmp;
