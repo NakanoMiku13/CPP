@@ -11,33 +11,40 @@ struct node{
 };
 template<typename data>
 struct Queue{
-    pointer<node<data>> head,back;
-    size_t size;
+    private: pointer<node<data>> head,back;
+    private: size_t _size;
     public:
-        Queue(): head{nullptr},size{0}{}
+        Queue(): head{nullptr},back{nullptr},_size{0}{}
     auto empty()->bool{
-        return (not head or size<=0) ? true : false;
+        return (not head and _size==0) ? true : false;
+    }
+    auto size()->size_t{
+        return _size;
     }
     auto push(data value){
         auto newNode = new node<data>(value);
         if(empty()) head = back = newNode;
         else{
-            auto tmp = back;
             back->next = newNode;
             back = newNode;
         }
-        size++;
+        _size++;
     }
     auto pop(){
         if(!empty()){
-            auto tmp = head;
-            head = head->next;
-            delete tmp;
+            if(head == back){
+                delete head;
+                head = back = nullptr;
+            }else{
+                auto tmp = head;
+                head = head->next;
+                delete tmp;
+            }
+            _size--;
         }
-        size--;
     }
     auto front()->data{
-        return head->value;
+        return (head!=nullptr)? head->value : data(NULL);
     }
 };
 auto main()->int{

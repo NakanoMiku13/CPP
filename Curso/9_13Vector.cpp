@@ -18,24 +18,6 @@ struct Vector{
     auto empty()->bool{
         return (_size==0 or not _head or not _back) ? true : false;
     }
-    auto push_clear(data value){
-        if(empty()) _head = _back = new node<data>(value);
-        else{
-            auto tmp = &_back;
-            tmp++;
-            *tmp = nullptr;
-            *tmp = new node<data>(value);
-            auto t = &_back;
-            cout<<"back: "<<&_back<<" "<<_back<<" "<<++t<<endl;
-            cout<<"tmp: "<<tmp<<" "<<*tmp<<endl;
-            auto temp = _back;
-            _back = *tmp;
-            temp->next = _back;
-            _back->prev = temp;
-            cout<<_back<<" "<<temp<<endl;
-        }
-        _size++;
-    }
     auto push_back(data value){
         auto newNode = new node<data>(value);
         if(empty()) _head = _back = newNode;
@@ -102,25 +84,20 @@ struct Vector{
         }
     }
     auto begin(){
-        return &_head;
+        return _head;
     }
     auto end(){
-        return &_back;
+        return _back;
     }
 };
 auto main()->int{
-    Vector<int> vectorI;
-    int n;
-    cin>>n;
-    for(auto i=0;i<n;i++){
-        int x;
-        cin>>x;
-        vectorI.push_back(x);
-    }
     for(auto i=0;i<n;i++){
         cout<<vectorI[i]<<endl;
     }
-    cout<<endl;
+    for(auto i=0;i<n;i++){
+        auto x = vectorI[i];
+        cout<<x<<endl;
+    }
     for(auto i=0;i<n;i++){
         cout<<vectorI.at(i)<<endl;
     }

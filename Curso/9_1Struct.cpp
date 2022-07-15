@@ -5,7 +5,7 @@ struct Alumno{
     int edad,id;
     float altura;
 };
-auto ingresaAlumno(auto id)->Alumno{
+auto ingresaAlumno(int id)->Alumno{
     string nombre;
     int edad;
     float altura;
@@ -16,8 +16,9 @@ auto ingresaAlumno(auto id)->Alumno{
 }
 auto imprimirAlumnos(auto data){
     cout<<"Estos son los alumnos registrados."<<endl;
-    for(auto i:data){
-        cout<<"Alumnos NO: "<<i.id<<"\nNombre: "<<i.Nombre<<"\nEdad: "<<i.edad<<"\nAltura: "<<i.altura<<endl<<endl;
+    for(auto i=0;i<data.size();i++){
+        Alumno alumnoN = data[i];
+        cout<<alumnoN.id;
     }
 }
 auto main()->int{

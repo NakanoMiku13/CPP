@@ -52,6 +52,7 @@ struct LinkedList{
                 back = back->prev; 
             }
             else{
+                delete head;
                 head = back = nullptr;
             }
         }
@@ -64,6 +65,7 @@ struct LinkedList{
                 auto tmp = head;
                 head = head->next;
             }else{
+                delete head;
                 head = back = nullptr;
             }
         }

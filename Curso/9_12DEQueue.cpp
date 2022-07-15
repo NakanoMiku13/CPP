@@ -11,12 +11,15 @@ struct node{
 };
 template<typename data>
 struct DEQueue{
-    pointer<node<data>> head,_back;
-    size_t size;
+    private: pointer<node<data>> head,_back;
+    private: size_t _size;
     public:
-        DEQueue(): head{nullptr},_back{nullptr},size{0}{}
+        DEQueue(): head{nullptr},_back{nullptr},_size{0}{}
     auto empty()->bool{
-        return (not head or not _back or size <=0) ? true : false;
+        return (not head and not _back and _size ==0) ? true : false;
+    }
+    auto size()->size_t{
+        return _size;
     }
     auto push_front(data value){
         auto newNode = new node<data>(value);
@@ -27,7 +30,7 @@ struct DEQueue{
             head = newNode;
             head->next = tmp;
         }
-        size++;
+        _size++;
     }
     auto push_back(data value){
         auto newNode = new node<data>(value);
@@ -37,31 +40,41 @@ struct DEQueue{
             newNode -> prev = _back;
             _back = newNode;
         }
-        size++;
+        _size++;
     }
     auto pop_front(){
         if(empty()) return;
         else{
-            size--;
-            auto tmp = head;
-            head = head->next;
-            delete tmp;
+            if(head == _back){
+                delete head;
+                head = _back = nullptr;
+            }else{
+                auto tmp = head;
+                head = head->next;
+                delete tmp;
+            }
+            _size--;
         }
     }
     auto pop_back(){
         if(empty()) return;
         else{
-            size--;
-            auto tmp = _back;
-            _back = _back->prev;
-            delete tmp;
+            if(head == _back){
+                delete head;
+                head = _back = nullptr;
+            }else{
+                 auto tmp = _back;
+                _back = _back->prev;
+                delete tmp;
+            }
+            _size--;
         }
     }
     auto front()->data{
-        return head->value;
+        return (head!=nullptr) ? head->value : data(NULL);
     }
     auto back()->data{
-        return _back->value;
+        return (_back!=nullptr) ? _back->value : data(NULL);
     }
 };
 auto main()->int{

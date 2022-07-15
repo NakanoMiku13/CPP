@@ -11,12 +11,15 @@ struct node{
 };
 template<typename data>
 struct CQueue{
-    pointer<node<data>> head,back;
-    size_t size;
+    private: pointer<node<data>> head,back;
+    private: size_t _size;
     public:
-        CQueue(): head{nullptr},back{nullptr},size{0}{}
+        CQueue(): head{nullptr},back{nullptr},_size{0}{}
     auto empty()->bool{
-        return (not head or not back or size <= 0) ? true : false;
+        return (not head and not back and _size == 0) ? true : false;
+    }
+    auto size()->size_t{
+        return _size;
     }
     auto push(data value){
         auto newNode = new node<data>(value);
@@ -28,21 +31,32 @@ struct CQueue{
             back->next = head;
             head->prev = back;
         }
-        size++;
+        _size++;
     }
     auto pop(){
         if(empty()) return;
         else{
-            auto tmp = head;
-            head = head->next;
-            head->prev = back;
-            back->next = head;
-            delete tmp;
-            size--;
+            if(head == back){
+                delete head;
+                head = back = nullptr;
+            }else{
+                auto tmp = head;
+                head = head->next;
+                head->prev = back;
+                back->next = head;
+                delete tmp;
+            }
+            _size--;
         }
     }
     auto front()->data{
-        return head->value;
+        return (head!=nullptr) ? head->value : data(NULL);
+    }
+    auto begin(){
+        return (head!=nullptr) ? head : NULL;
+    }
+    auto end(){
+        return (back!=nullptr) ? back : NULL;
     }
 };
 auto main()->int{
@@ -54,8 +68,10 @@ auto main()->int{
         circularQueues.push(x);
     }
     cout<<endl;
-    while(!circularQueues.empty()){
-        cout<<circularQueues.front()<<endl;
-        circularQueues.pop();
+    auto tmp = circularQueues.begin();
+    while(true){
+        cout<<tmp->value<<" ";
+        tmp=tmp->next;
     }
+    cout<<"holi";
 }

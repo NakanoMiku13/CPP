@@ -11,39 +11,40 @@ struct node{
 };
 template<typename data>
 struct PQueue{
-    pointer<node<data>> head,back;
-    size_t size;
+    private: pointer<node<data>> head,back;
+    private: size_t _size;
     public:
-        PQueue(): head{nullptr},back{nullptr},size{0}{}
+        PQueue(): head{nullptr},back{nullptr},_size{0}{}
     auto empty()->bool{
-        return (not head && size<=0) ? true : false;
+        return (not head or _size<=0) ? true : false;
+    }
+    auto size()->size_t{
+        return _size;
     }
     auto push(data value){
         auto newNode = new node<data>(value);
         if(empty()) head = back = newNode;
         else{
-            if(head->value <= newNode->value){
-                auto tmp = head;
+            if(newNode->value > head->value){
+                head->prev = newNode;
+                newNode->next = head;
                 head = newNode;
-                tmp->prev = newNode;
-                head->next = tmp;
             }else{
                 auto move = head;
-                while(move->next != nullptr){
-                    if(move->value < newNode->value){
-                        auto tmp = move;
-                        move->prev->next = newNode;
-                        move = newNode;
-                        newNode->next = tmp;
-                        size++;
-                        return;
-                    }
-                    move = move -> next;
+                for(;move->value > newNode->value && move->next!=nullptr;move = move->next);
+                if(move->next != nullptr or (move->value < newNode->value && move->next == nullptr)){
+                    auto tmp = move->prev;
+                    tmp->next = move->prev = newNode;
+                    newNode->next = move;
+                    newNode->prev = tmp;
+                }else{
+                    move->next = newNode;
+                    newNode->prev = move;
+                    back = newNode;
                 }
-                move->next = newNode;
             }
         }
-        size++;
+        _size++;
     }
     auto pop(){
         if(!empty()){
@@ -51,10 +52,10 @@ struct PQueue{
             head = head->next;
             delete tmp;
         }
-        size--;
+        _size--;
     }
     auto front()->data{
-        return head->value;
+        return (head!=nullptr)? head->value : data(NULL);
     }
 };
 auto main()->int{
