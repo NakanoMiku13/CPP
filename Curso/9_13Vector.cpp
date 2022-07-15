@@ -42,25 +42,35 @@ struct Vector{
         if(empty()) return;
         else{
             _size--;
-            auto tmp = _head;
-            _head = _head->next;
-            delete tmp;
+            if(_head == _back){
+                delete _head;
+                _head = _back = nullptr;
+            }else{
+                auto tmp = _head;
+                _head = _head->next;
+                delete tmp;
+            }
         }
     }
     auto pop_back(){
         if(empty()) return;
         else{
             _size--;
-            auto tmp = _back;
-            _back = _back->prev;
-            delete tmp;
+            if(_head == _back){
+                delete _head;
+                _head = _back = nullptr;
+            }else{
+                auto tmp = _back;
+                _back = _back->prev;
+                delete tmp;
+            }
         }
     }
     auto front()->data{
-        return _head->value;
+        return (_head!=nullptr) ? _head->value : data(NULL);
     }
     auto back()->data{
-        return _back->value;
+        return (_back != nullptr) ? _back->value : data(NULL);
     }
     auto at(const int index)->data{
         if(index < _size){
@@ -75,7 +85,7 @@ struct Vector{
         return _size;
     }
     auto operator[](const int index)->data{
-        if(index < _size){
+        if(index < _size && !empty()){
             auto move = _head;
             for(auto i = 1; i <= index; i++,move=move->next);
             return move->value;
@@ -83,21 +93,17 @@ struct Vector{
             return (data)NULL;
         }
     }
-    auto begin(){
-        return _head;
-    }
-    auto end(){
-        return _back;
-    }
 };
 auto main()->int{
     for(auto i=0;i<n;i++){
         cout<<vectorI[i]<<endl;
     }
+    cout<<endl;
     for(auto i=0;i<n;i++){
         auto x = vectorI[i];
         cout<<x<<endl;
     }
+    cout<<endl;
     for(auto i=0;i<n;i++){
         cout<<vectorI.at(i)<<endl;
     }
