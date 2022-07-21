@@ -1,130 +1,90 @@
-#include<iostream>
+#include<bits/stdc++.h>
 using namespace std;
-template <typename data>
-using pointer = data*;
-template <typename data>
-struct node{
-    data value;
-    pointer<node> next,prev;
+#define punteroVacio  nullptr
+#define nodoVacio  nullptr
+template<typename dato> using pointer = dato*;
+template<typename informacion> struct nodo{
     public:
-        node(data value): value{value},next{nullptr},prev{nullptr}{}
+        informacion valorAlmacenado;
+        pointer<nodo> siguiente, anterior;
+        //constructor
+        nodo(informacion valorPorAlmacenar): valorAlmacenado(valorPorAlmacenar),
+        siguiente(punteroVacio),anterior(punteroVacio){}
 };
-template<typename data>
-struct List{
-    private: pointer<node<data>> cabeza,espalda;
-    private: size_t size;
+template<typename tipoDeDato> struct pqueue{
+    private:
+        pointer<nodo<tipoDeDato>> _cabeza,_espalda;
+        size_t _cantElementos;
     public:
-        List(): cabeza{nullptr},espalda{nullptr},size{0}{}
-    auto empty()->bool{
-        return (size==0 or not cabeza or not espalda) ? true : false;
-    }
-    auto push_back(data pedritoSola){
-        auto newNode = new node<data>(pedritoSola);
-        if(empty()) cabeza = espalda = newNode;
-        else{
-            newNode->prev=espalda;
-            espalda->next = newNode;
-            espalda = newNode;
+        pqueue(): _cabeza(punteroVacio), _espalda(punteroVacio), _cantElementos(0){}
+        auto vacia()->bool{
+            return (_cantElementos == 0) ? true : false;
         }
-        size++;
-    }
-    auto push_front(data value){
-        auto newNode = new node<data>(value);
-        if(empty()) cabeza = espalda = newNode;
-        else{
-            cabeza->prev = newNode;
-            newNode->next = cabeza;
-            cabeza = newNode;
+        auto longitud()->size_t{
+            return _cantElementos;
         }
-        size++;
-    }
-    auto pop_front(){
-        if(empty()) return;
-        else{
-            size--;
-            if(cabeza == espalda) {delete cabeza; cabeza = espalda = nullptr;}
+        auto quitar(){
+            if(vacia()) return;
             else{
-                auto tmp = cabeza;
-                cabeza = cabeza->next;
-                cabeza->prev = nullptr;
-                delete tmp;
+                if(_cabeza == _espalda){
+                    delete _cabeza;
+                    _cabeza = _espalda = punteroVacio;
+                }else{
+                    auto temporal = _cabeza;
+                    _cabeza = _cabeza->siguiente;
+                    delete temporal;
+                }
+                _cantElementos--;
             }
         }
-    }
-    auto front()->data{
-        return (cabeza!=nullptr) ? cabeza->value : data(NULL);
-    }
-    auto back()->data{
-        return (espalda!=nullptr) ? espalda->value : data(NULL);
-    }
-    auto pop_back(){
-        if(empty()) return;
-        else{
-            size--;
-            if(cabeza == espalda) {delete cabeza; cabeza = espalda = nullptr;}
+        auto insertar(tipoDeDato valorNuevo){
+            auto nuevoNodo = new nodo<tipoDeDato>(valorNuevo);
+            if(vacia()) _cabeza = _espalda = nuevoNodo;
             else{
-                auto tmp = espalda;
-                espalda = espalda->prev;
-                espalda->next = nullptr;
-                delete tmp;
+                //Caso donde el nuevo elemento es mayor a la _cabeza
+                if(_cabeza->valorAlmacenado < nuevoNodo->valorAlmacenado){
+                    nuevoNodo->siguiente = _cabeza;
+                    _cabeza->anterior = nuevoNodo;
+                    _cabeza = nuevoNodo;
+                }else{
+                    //Caso especial
+                    auto nodoMovimiento = _cabeza;
+                    for(;nodoMovimiento->valorAlmacenado > nuevoNodo->valorAlmacenado
+                    && nodoMovimiento->siguiente != nodoVacio;nodoMovimiento=nodoMovimiento->siguiente);
+                    //Caso donde estamos en el ultimo nodo
+                    if(nodoMovimiento->siguiente == nodoVacio && nodoMovimiento->valorAlmacenado > nuevoNodo ->valorAlmacenado){
+                        _espalda-> siguiente = nuevoNodo;
+                        nuevoNodo->anterior = _espalda;
+                        _espalda = nuevoNodo;
+                    }else{
+                        auto temporal = nodoMovimiento->anterior;
+                        nuevoNodo->siguiente = nodoMovimiento;
+                        nuevoNodo->anterior = temporal;
+                        nodoMovimiento->anterior = nuevoNodo;
+                        temporal->siguiente = nuevoNodo;
+                        _espalda = nodoMovimiento;
+                    }
+                }
             }
+            _cantElementos++;
         }
-    }
-    auto push_middle(data value){
-        if(empty()) push_front(value);
-        else{
-            auto newNode = new node<data>(value);
-            auto mid = (size/2)-1;
-            auto move = cabeza;
-            for(int i=0;i<mid;i++,move = move->next);
-            auto tmp1 = move;
-            auto tmp2 = move->next;
-            tmp1->next = newNode;
-            newNode->prev = tmp1;
-            newNode->next = tmp2;
-            tmp2->prev = newNode;
-            size++;
+        auto front(){
+            return _cabeza->valorAlmacenado;
         }
-    }
-    auto push_at(data value,int position){
-        position--;
-        if(empty()) push_front(value);
-        else if(position == 0) push_front(value);
-        else if(position == size-1) push_back(value);
-        else{
-            auto move = cabeza;
-            auto newNode = new node<data>(value);
-            position--;
-            for(int i=0;i<position;i++,move = move->next);
-            auto tmp1 = move;
-            auto tmp2 = move->next;
-            tmp1->next = newNode;
-            newNode->prev = tmp1;
-            newNode->next = tmp2;
-            tmp2->prev = newNode;
-            size++;
-        }
-    }
-    auto length()->size_t{
-        return size;
-    }
 };
-int main(){
-   List<int> lista;
-   lista.push_back(1);
-   lista.push_back(2);
-   lista.push_back(3);
-   lista.push_back(4);
-   lista.push_front(6);
-   lista.push_middle(5);
-   lista.push_middle(15);
-   lista.push_at(35,1);
-   lista.push_at(100,8);
-   lista.push_at(500,3);
-   lista.push_at(600,7);
-   while(!lista.empty()){
-    cout<<lista.front()<<endl;
-    lista.pop_front();
-   }
-   cout<<"holiii";
+auto main()->int{
+    pqueue<int> pp;
+    int n;
+    cin>>n;
+    for(auto i=0;i<n;i++){
+        int x;
+        cin>>x;
+        pp.insertar(x);
+    }
+
+    cout<<endl;
+    while(!pp.vacia()){
+        cout<<pp.front()<<" ";
+        pp.quitar();
+    }
 }

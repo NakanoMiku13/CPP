@@ -49,7 +49,7 @@ struct LinkedList{
         else{
            if(back->prev!=nullptr && back!=head){
                 auto tmp = back;
-                back = back->prev; 
+                back = back->prev;
             }
             else{
                 delete head;
