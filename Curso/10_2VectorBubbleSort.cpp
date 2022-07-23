@@ -12,6 +12,33 @@ template<typename dataset> auto operator<<(ostream& os,pointer<node<dataset>> da
     os<<data->value;
     return os;
 }
+template<typename dataset> struct _iterator{
+    private:
+        pointer<node<dataset>> _current;
+    public:
+        _iterator(pointer<node<dataset>> _currentNode) : _current(_currentNode){}
+        auto &operator++(){
+            _current = _current->next;
+            return _current;
+        }
+        auto operator++(int){
+            auto retVal = *this;
+            ++(*this);
+            return retVal;
+        }
+        auto *operator->()const{
+            return &_current->value;
+        }
+        auto &operator*()const{
+            return _current->value;
+        }
+        auto operator==(const auto &self){
+            return _current == self->_current;
+        }
+        auto operator!=(const auto &self){
+            return _current!= self._current;
+        }
+};
 template<typename data> struct Vector{
     private:
         pointer<node<data>> _head,_back;
@@ -19,23 +46,24 @@ template<typename data> struct Vector{
         #define not_head not _head
         #define not_back not _back
         #define emp not_head and not_back and _size==0
-        #define insert if(empty()) _head = _back = newNode(value); else
-        auto newNode(data value)->pointer<node<data>>{
+        #define insert if(empty()) _head = _back = _newNode(value); else
+        typedef _iterator<data> iterator;
+        auto _newNode(data value)->pointer<node<data>>{
             auto x = new node<data>(value);
             return x;
         }
-        auto getValue(const int index){
+        auto _getValue(const int index){
             auto move = _head;
             for(int i=0;i<index;i++,move = move->next);
             return (move!=nullptr) ? move->value : data(NULL);
         }
-        auto Swap(auto* valueA,auto* valueB){
-            auto tmp = *valueA;
-            *valueA = *valueB;
-            *valueB = *tmp;
-            cout<<valueA<<" "<<valueB<<endl;
+        template<typename valueA,typename valueB>
+        auto _swap(valueA* nodeA,valueB* nodeB)->void{
+            auto tmp = *nodeA;
+            *nodeA = *nodeB;
+            *nodeB = tmp;
         }
-        auto getNode(const int index){
+        auto _getNode(const int index){
             auto move = _head;
             for(int i=0;i<index;i++,move = move->next);
             return (move!=nullptr) ? move : data(NULL);
@@ -55,7 +83,7 @@ template<typename data> struct Vector{
             return (!empty()) ? _back->value : data(NULL);
         }
         auto push_front(data value){
-            auto new_Node = newNode(value);
+            auto new_Node = _newNode(value);
             insert{
                 new_Node->next = _head;
                 _head->prev = new_Node;
@@ -64,7 +92,7 @@ template<typename data> struct Vector{
             _size++;
         }
         auto push_back(data value){
-            auto new_Node = newNode(value);
+            auto new_Node = _newNode(value);
             insert{
                 new_Node->prev = _back;
                 _back->next = new_Node;
@@ -100,24 +128,36 @@ template<typename data> struct Vector{
                 _size--;
             }
         }
+        auto bubble_Sort(){
+            auto x = _head;
+            for(int i=0;i<_size;i++,x=x->next){
+                auto y = x;
+                for(int j=i;j<_size;j++,y=y->next){
+                    if(x->value>y->value) _swap(&x->value,&y->value);
+                }
+            }
+        }
+        /*auto bubble_Sort(){
+            auto x = *this;
+            for(int i=0;i<_size;i++){
+                for(int j=i;j<_size;j++){
+                    if(x[i]>x[j]) _swap(&x[i],&x[j]);
+                }
+            }
+        }*/
         auto &operator[](const int index){
             auto move = _head;
             for(int i=0;i<index;i++,move = move->next);
             return move->value;
         }
         auto operator+(const int index){
-            return (!empty() && _size>0) ? getValue(index) : data(NULL);
+            return (!empty() && _size>0) ? _getValue(index) : data(NULL);
         }
-        auto swap2(const int indexA, const int indexB){
-            auto a = getNode(indexA);
-            auto b = getNode(indexB);
-            Swap(&a->value,&b->value);
+        iterator begin(){
+            return this->_head;
         }
-        auto reverse(){
-            
-        }
-        auto bubbleSort(){
-
+        iterator end(){
+            return this->_back->next;
         }
 };
 int main(){
@@ -128,19 +168,14 @@ int main(){
         cin>>x;
         vectors.push_back(x);
     }
-    cout<<endl;
+    cout<<endl<<"Antes de ordenar: "<<endl;
     for(auto i=0;i<vectors.size();i++){
         cout<<vectors[i]<<" ";
     }
-    vectors.swap2(0,1);
-    cout<<endl;
-    for(auto i=0;i<n;i++){
-        auto x = vectors+i;
-        cout<<x<<" ";
+    vectors.bubble_Sort();
+    cout<<"\nDespues de ordenar: "<<endl;
+    for(auto i:vectors){
+        cout<<i<<" ";
     }
-    cout<<endl;
-    while(!vectors.empty()){
-        cout<<vectors.back()<<" ";
-        vectors.pop_back();
-    }
+
 }
