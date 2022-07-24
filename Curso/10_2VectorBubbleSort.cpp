@@ -145,6 +145,9 @@ template<typename data> struct Vector{
                 }
             }
         }*/
+        auto at(const int index){
+            return (!empty()) ? _getValue(index) : data(NULL);
+        }
         auto &operator[](const int index){
             auto move = _head;
             for(int i=0;i<index;i++,move = move->next);
