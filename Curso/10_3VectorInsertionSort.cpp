@@ -161,7 +161,6 @@ template<typename data> struct Vector{
         iterator end(){
             return this->_back->next;
         }
-
 };
 auto main()->int{
     int n;
