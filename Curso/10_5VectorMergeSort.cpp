@@ -26,7 +26,7 @@ template<typename data> struct Vector{
                     return retVal;
                 }
                 auto *operator->(){
-                    return &_current->value:
+                    return &_current->value;
                 }
                 auto &operator*(){
                     return _current->value;
@@ -38,7 +38,7 @@ template<typename data> struct Vector{
                     return _current != _self._current;
                 }
         };
-        typename _iterator<data> iterator;
+        typedef _iterator<data> iterator;
     public:
         Vector(): _head(nullptr),_back(nullptr),_size(0){}
         auto empty(){
@@ -75,7 +75,13 @@ template<typename data> struct Vector{
         }
         auto &operator[](const int index){
             auto move = _head;
-            for(int i=o;i<index;i++,move=move->next);
+            for(int i=0;i<index;i++,move=move->next);
+            return move->value;
+        }
+        auto operator+(const int index){
+            auto move = _head;
+            for(int i=0;i<index;i++,move=move->next);
+            return move->value;
         }
         auto begin()->iterator{
             return this->_head;
