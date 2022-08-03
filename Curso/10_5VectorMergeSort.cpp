@@ -11,6 +11,11 @@ template<typename data> struct Vector{
     private:
         pointer<node<data>> _head,_back;
         size_t _size;
+        template<typename dataA,typename dataB> auto _swap(dataA a,dataB b)->void{
+            auto t = *a;
+            *a = *b;
+            *b = t;
+        }
         template<typename dataset> struct _iterator{
             private:
                 pointer<node<dataset>> _current;
@@ -89,6 +94,22 @@ template<typename data> struct Vector{
         auto end()->iterator{
             return this->_back->next;
         }
+        auto MergeSort(const int begin=0,int end=-1)->void{
+            if(end==-1) end = _size-1;
+            if(begin >= end-1) return;
+            auto array = *this;
+            int mid = (begin + end) / 2;
+            auto pivot = array[mid];
+            //swapping elements
+            for(int i = begin,j = end; i < j; ){
+                auto t = array[i], v = array[j];
+                if(t < pivot) i++;
+                else if(v > pivot) j--;
+                else _swap(&array[i],&array[j]);
+            }
+            MergeSort(begin,mid-1);
+            MergeSort(mid,end);
+        }
 };
 auto main()->int{
     int n;
@@ -98,5 +119,6 @@ auto main()->int{
         cin>>x;
         v.push_back(x);
     }
+    v.MergeSort();
     for(auto i:v) cout<<i<<" ";
 }
