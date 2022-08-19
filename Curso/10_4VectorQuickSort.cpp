@@ -126,7 +126,7 @@ template<typename data> struct Vector{
         auto &operator[](const int index){
             auto move = _head;
             for(int i=0;i<index;i++,move = move->next);
-            return move->value; 
+            return move->value;
         }
         auto operator+(const int index){
             return (index <= _size) ? _getValue(index) : data(NULL);
@@ -154,7 +154,7 @@ template<typename data> struct Vector{
         }
         auto quickSort(const int begin = 0, int end = -1)->void{
             auto array = *this;
-            if(end == -1) end = _size-1;
+            if(end == -1) end = _size - 1;
             if(begin>=end){
                 return;
             }else if(begin+1 == end or begin == end-1){
@@ -162,7 +162,7 @@ template<typename data> struct Vector{
                 return;
             }
             auto pivot = array[begin];
-            int i = begin, j = end,pos=0;
+            int i = begin, j = end, pos = 0;
             while(i <= j){
                 if(array[i] < pivot){
                     i++;
@@ -171,11 +171,14 @@ template<typename data> struct Vector{
                         j--;
                     }else{
                         _swap(&array[i],&array[j]);
+                        if(array[i]==pivot) pos = i;
+                        else if(array[j]==pivot) pos = j;
                         i++;
+                        j--;
                     }
                 }
             }
-            for(int x = begin; x <= end;x++) if(array[x]==pivot){pos = x; break;}
+            //for(int x = begin; x <= end;x++) if(array[x]==pivot){pos = x; break;}
             //left
             quickSort(begin,pos);
             //right
