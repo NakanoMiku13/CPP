@@ -56,6 +56,9 @@ template<typename data> struct Vector{
                 auto operator!=(const auto &_self){
                     return _current!=_self._current;
                 }
+                auto dir(){
+                    return &_current->value;
+                }
         };
         typedef _iterator<data> iterator;
         auto _getValue(const int index){
@@ -128,8 +131,10 @@ template<typename data> struct Vector{
             for(int i=0;i<index;i++,move = move->next);
             return move->value;
         }
-        auto operator+(const int index){
-            return (index <= _size) ? _getValue(index) : data(NULL);
+        auto *operator+(const int index){
+             auto move = _head;
+            for(int i=0;i<index;i++,move = move->next);
+            return move;
         }
         iterator begin(){
             return (!empty()) ? _head : NULL;
@@ -155,24 +160,29 @@ template<typename data> struct Vector{
         auto quickSort(const int begin = 0, int end = -1)->void{
             auto array = *this;
             if(end == -1) end = _size - 1;
+            iterator b = array+begin, e = array+end;
             if(begin>=end){
                 return;
             }else if(begin+1 == end or begin == end-1){
-                if(array[begin] > array[end]) _swap(&array[begin],&array[end]);
+                if(*b > *e) _swap(b.dir(),e.dir());
                 return;
             }
-            auto pivot = array[begin];
+            auto pivot = *b;
             int i = begin, j = end, pos = 0;
             while(i <= j){
-                if(array[i] < pivot){
+                if(*b < pivot){
+                    b++;
                     i++;
                 }else{
-                    if(array[j] > pivot){
+                    if(*e > pivot){
+                        e--;
                         j--;
                     }else{
-                        _swap(&array[i],&array[j]);
-                        if(array[i]==pivot) pos = i;
-                        else if(array[j]==pivot) pos = j;
+                        _swap(b.dir(),e.dir());
+                        if(*b==pivot) pos = i;
+                        else if(*e==pivot) pos = j;
+                        b++;
+                        e--;
                         i++;
                         j--;
                     }
