@@ -112,8 +112,9 @@ auto main()->int{
     for(int i=0;i<n;i++){
         cin>>x;
         v.push_back(x);
-    } 
+    }
     for(auto i:v) cout<<i<<" ";
+    cout<<endl;
     cin>>x;
     cout<<"Valor: "<<v.find(x)<<endl<<"Posicion: "<<v.findPosition(x);
 }
