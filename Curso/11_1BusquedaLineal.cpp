@@ -83,7 +83,6 @@ template<typename data> struct Vector{
             for(auto i:array){
                 if(i==searchValue) return i;
             }
-            return data(NULL);
         }
         auto findPosition(data searchValue)->int{
             auto t = _size-1;
@@ -102,7 +101,7 @@ template<typename data> struct Vector{
             return _head;
         }
         auto end()->iterator{
-            return _head->next;
+            return _back->next;
         }
 };
 auto main()->int{
@@ -116,5 +115,5 @@ auto main()->int{
     for(auto i:v) cout<<i<<" ";
     cout<<endl;
     cin>>x;
-    cout<<"Valor: "<<v.find(x)<<endl<<"Posicion: "<<v.findPosition(x);
+    cout<<"Valor: "<<v.find(x)<<endl<<"Posicion: "<<v.findPosition(x)+1;
 }

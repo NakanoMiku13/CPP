@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <bitset>
 #include <complex>
-#include <deque>
 #include <exception>
 #include <fstream>
 #include <functional>
@@ -15,7 +14,6 @@
 #include <iterator>
 #include <limits>
 #include <locale>
-#include <map>
 #include <memory>
 #include <new>
 #include <numeric>
@@ -42,6 +40,15 @@ template<typename data> class List{
     private:
         pointer<node<data>> _head, _back;
         size_t _size;
+        template<typename valueA,typename valueB> auto _swap(valueA *a, valueB *b)->void{
+            cout<<"Swap\n";
+            auto tmp = *a;
+            *a = *b;
+            *b = tmp;
+        }
+        template<typename datasetA,typename datasetB> auto _replace(datasetA *oldValue,datasetB newValue){
+            *oldValue = newValue;
+        }
         template<typename dataset> class _iterator{
             private:
                 pointer<node<dataset>> _current;
@@ -77,10 +84,18 @@ template<typename data> class List{
                 auto operator!=(const auto &self){
                     return _current != self._current;
                 }
+                auto dir(){
+                    return &_current->value;
+                }
         };
     public:
         typedef _iterator<data> iterator;
         List(): _head{nullptr},_back{nullptr},_size{0}{}
+        List(initializer_list<data> list){
+            _head = _back = nullptr;
+            _size = 0;
+            for(auto i : list) push_back(i);
+        }
         //Output functions
         auto empty(){
             return (not _head or not _back or _size == 0) ? true : false;
@@ -112,9 +127,14 @@ template<typename data> class List{
                 cout << endl;
             }
         }
+        auto *operator+(const int index){
+            auto t = _head;
+            for(auto i = 0; i < index; i++, t = t -> next);
+            return t;
+        }
         auto &operator[](const int index){
             auto t = _head;
-            for(auto i = 0; i < index; i++,t=t->next);
+            for(auto i = 0; i < index; i++, t = t -> next);
             return t->value;
         }
         //Input functions
@@ -157,5 +177,22 @@ template<typename data> class List{
                 _head -> prev = nullptr;
                 delete(tmp);
             }
+        }
+        auto sort(const size_t begin = 0, size_t end = -1)->void{
+            //Based on mergesort implementation
+            if(end == -1) end = _size-1;
+            if(begin >= end - 1) return;
+            auto array = *this;
+            size_t mid = (begin + end) / 2;
+            auto pivot = array[mid];
+            //swapping elements
+            auto t = array[begin], v = array[end];
+            for(int i = begin, j = end ; i < j ; ){
+                if(t < pivot) i++;
+                else if(v > pivot) j--;
+                else _swap(&array[i],&array[j]);
+            }
+            sort(begin,mid-1);
+            sort(mid,end);
         }
 };
