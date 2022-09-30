@@ -205,15 +205,15 @@ auto validateInputs()->void{
     }while(allValid);
 }
 auto regexFunction()->void{
-    regex re("[0-9]?*1[1-1]?[0-9]?*[1+][0-9]?*|[0-9]?*2[2-2]?[0-9]?*[2+][0-9]?*|[0-9]?*3[3-3]?[0-9]?*[3+][0-9]?*|[0-9]?*4[4-4]?[0-9]?*[4+][0-9]?*|[0-9]?*5[5-5]?[0-9]?*[5+][0-9]?*|[0-9]?*6[6-6]?[0-9]?*[6+][0-9]?*|[0-9]?*7[7-7]?[0-9]?*[7+][0-9]?*|[0-9]?*8[8-8]?[0-9]?*[8+][0-9]?*|[0-9]?*9[9-9]?[0-9]?*[9+][0-9]?*");
+    regex re("[0-9]?*0[0-0]?[0-9]?*[0+][0-9]?*|[0-9]?*1[1-1]?[0-9]?*[1+][0-9]?*|[0-9]?*2[2-2]?[0-9]?*[2+][0-9]?*|[0-9]?*3[3-3]?[0-9]?*[3+][0-9]?*|[0-9]?*4[4-4]?[0-9]?*[4+][0-9]?*|[0-9]?*5[5-5]?[0-9]?*[5+][0-9]?*|[0-9]?*6[6-6]?[0-9]?*[6+][0-9]?*|[0-9]?*7[7-7]?[0-9]?*[7+][0-9]?*|[0-9]?*8[8-8]?[0-9]?*[8+][0-9]?*|[0-9]?*9[9-9]?[0-9]?*[9+][0-9]?*");
     string reg;
     bool validate = false;
     cout<<"Type the number sequence without spaces:\n";
     do{
         cin>>reg;
-        validate = regex_match(reg,re);
-        if(!validate) cout<<"Try again\n";
-    }while(!validate);
+        validate = (regex_match(reg,re));
+        if(!validate && reg.size() < 5) cout<<"Try again\n";
+    }while(!validate && reg.size() < 5);
     cout<<"It is a valid sequence, you can continue, have a nice day.\n";
 }
 auto main()->int{
