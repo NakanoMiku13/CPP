@@ -217,7 +217,6 @@ auto regexFunction()->void{
     cout<<"It is a valid sequence, you can continue, have a nice day.\n";
 }
 auto main()->int{
-    regexFunction();
     typeOfRange();
     cout<<"Type w1 and w2\n";
     cin>>w1>>w2;
@@ -225,5 +224,6 @@ auto main()->int{
     defineTypes(w1,w2);
     alphabets();
     alphabetPow();
+    regexFunction();
     return 0;
 }
