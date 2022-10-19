@@ -143,6 +143,10 @@ auto differenceAlphabets(auto l1,auto l2)->vector<string>{
             }
         }
     }
+    for(auto i : l1){
+        if(temp[i] == 1) cout<<i<<endl;
+    }
+    
     for(auto i = temp.begin(); i != temp.end();i++) if(i->second == 1) newAlphabet.push_back(i->first);
     cout<<"\nD1\n";
     for(auto i:newAlphabet) cout<<i<<endl;

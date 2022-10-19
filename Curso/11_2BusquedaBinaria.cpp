@@ -15,10 +15,12 @@ auto binarySearch(auto arr,const int begin,const int end,const auto x){
 }
 auto main()->int{
     List<int> list = {9,1,3,2,0,5,4,6,8,7};
-    list.print();
+    auto x = list[0];
+   /* list.print();
     list.sort();
     cout<<endl;
     list.print();
     cout<<endl;
-    cout<<binarySearch(list,0,list.size(),2);
+    */
+    //cout<<binarySearch(list,0,list.size(),2);
 }
