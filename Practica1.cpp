@@ -126,7 +126,66 @@ auto setString(vector<string> alphabet, map<string,bool> verification)->string{
     }while(!check);
     return str;
 }
-//Realizar punto 3
+auto getSuffixes(string str)->vector<string>{
+    vector<string> suffixes;
+    try{
+        for(int i = str.length(); i >= 0; i--){
+            string suffix = "";
+            for(int j = str.length(); j >= i; suffix += str[j--]);
+            suffixes.push_back(suffix);
+        }
+        if(suffixes.size() == 0) throw;
+    }catch(...){
+        cout<<"Error not handled"<<endl;
+    }
+    suffixes.push_back("lambda");
+    return suffixes;
+}
+auto getPrefixes(string str)->vector<string>{
+    vector<string> prefixes;
+    try{
+        for(int i = 0 ; i < str.length() ; i++){
+            string prefix = "";
+            for(int j = 0 ; j <= i ; prefix += str[j++]);
+            prefixes.push_back(prefix);
+        }
+        if(prefixes.size() == 0) throw;
+    }catch(...){
+        cout<<"Error not handled"<<endl;
+    }
+    prefixes.push_back("lambda");
+    return prefixes;
+}
+auto determineType(vector<string> suffixes,vector<string> prefixes,string str)->pair<vector<string>,vector<string>>{
+    vector<string> properSuffixes, properPrefixes;
+    for(auto i : prefixes) if(i != str && i != "lambda") properPrefixes.push_back(i);
+    for(auto i : suffixes) if(i != str && i != "lambda") properSuffixes.push_back(i);
+    return pair<vector<string>, vector<string>>(properSuffixes,properPrefixes);
+}
+auto getSubStrings(vector<string> prefixes,vector<string> suffixes,string str)->vector<string>{
+    vector<string> subStrings = {"lambda",str};
+    int sufSize = suffixes.size() - 1;
+    for(int i = 0; i < sufSize; i++) {
+        string subString = "",prefix = prefixes[i],suffix = suffixes[i];
+        int j = 0, l = str.length() - 1;
+        for(auto k : prefix) if(k != str[j++]) subString += k;
+        for(auto k : suffix) if(k != str[l--]) subString += k;
+        subStrings.push_back(subString);
+    }
+    return subStrings;
+}
+auto getSubSets(string str)->vector<string>{
+    vector<string> subSets = {"lambda",str};
+    int numberSubSets = 1 + rand()%100;
+    map<string,bool> exist;
+    for(int i = 0, pos, len ; i < numberSubSets ; i++){
+        string subSet = "";
+        len = rand() % str.length() -1;
+        for(int j = 0 ; j < len ; j++, pos = rand() % str.length()) if(str[pos] != ' ') subSet += str[pos];
+        if(subSet.length() > 0 && !exist[subSet]){ subSets.push_back(subSet); exist[subSet] = true; }
+    }
+    return subSets;
+}
 auto generateLanguage(vector<string> alphabet)->vector<string>{
     vector<string> language = vector<string>();
     try{
@@ -223,15 +282,43 @@ auto main()->int{
     map<string,bool> verification;
     for(auto i : alphabet) verification[i] = true;
     string string1 = setString(alphabet, verification), string2 = setString(alphabet,verification);
-    vector<string> language1 = generateLanguage(alphabet), language2 = generateLanguage(alphabet), difference = differenceBetweenLanguages(language1,language2);
+    vector<string> language1 = generateLanguage(alphabet), language2 = generateLanguage(alphabet), difference = differenceBetweenLanguages(language1,language2), prefixes = getPrefixes(string1),suffixes = getSuffixes(string1),subSets = getSubSets(string1),alphabetPower; 
+    pair<vector<string>,vector<string>> types = determineType(suffixes,prefixes,string1);
+    if(prefixes.size() == 0) cout<<"There no exist prefixes between "<<string1<<" and "<<string2<<endl;
+    else{
+        cout<<"The prefixes are: "<<endl;
+        for(auto i : prefixes) cout<<i<< " ";
+        cout<<endl<<"The proper prefixes are: "<<endl;
+        for(auto i : types.second) cout<<i<<" ";
+        cout<<endl;
+    }
+    if(suffixes.size() == 0) cout<<"There no exist suffixes between "<<string1<<" and "<<string2<<endl;
+    else{
+        cout<<"The suffixes are: "<<endl;
+        for(auto i : suffixes) cout<<i<< " ";
+        cout<<endl<<"The proper suffixes are: "<<endl;
+        for(auto i : types.first) cout<<i<<" ";
+        cout<<endl;
+    }
+    if(suffixes.size() > 0 && suffixes.size() > 0){
+        vector<string> subStrings = getSubStrings(prefixes, suffixes,string1);
+        cout<<"The substrings are: "<<endl;
+        for(auto i : subStrings) cout<<i<<" ";
+        cout<<endl;
+    }else{
+        cout<<"There no exist suffixes and suffixes between "<<string1<<" and "<<string2<<endl;
+    }
+    cout<<"The subsets are: "<<endl;
+    for(auto i : subSets) cout<<i<<" ";
+    cout<<endl;
     cout<<"Language 1:\n";
     for(auto i : language1) cout<<i<<" ";
-    cout<<"Language 2:\n";
+    cout<<"\nLanguage 2:\n";
     for(auto i : language2) cout<<i<<" ";
-    cout<<"Difference between Language 1 and Language 2:\n";
+    cout<<"\nDifference between Language 1 and Language 2:\n";
     for(auto i : difference) cout<<i<<" ";
-    vector<string> alphabetPower = generateAlphabetPower(alphabet);
-    cout<<"Alphabet powered:\n";
+    alphabetPower = generateAlphabetPower(alphabet);
+    cout<<"\nAlphabet powered:\n";
     for(auto i : alphabetPower) cout<<i<<" ";
     return 0;
 }

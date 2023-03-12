@@ -1,0 +1,204 @@
+﻿Diagnose log at 2023-03-12T04:42:31Z
+
+AppPath: /usr/local/bin/git-credential-manager
+InstallDir: /usr/local/share/gcm-core/
+Version: 2.0.935+8b4735fc7b
+
+------------
+Diagnostic: Environment
+Skipped: False
+Success: True
+Exception: None
+Log:
+OSType: Linux
+OSVersion: Linux miku 6.1.0-kali5-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.12-1kali2 (2023-02-23) x86_64 GNU/Linux
+Reading environment variables... OK
+ Variables:
+SESSION_MANAGER=local/miku:@/tmp/.ICE-unix/2207,unix/miku:/tmp/.ICE-unix/2207
+XAUTHORITY=/run/user/1000/gdm/Xauthority
+_=/usr/bin/git
+USER=miku
+PATH=/usr/lib/git-core:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/snap/bin:/home/miku/.dotnet/tools
+GNOME_KEYRING_CONTROL=/run/user/1000/keyring
+COMMAND_NOT_FOUND_INSTALL_PROMPT=1
+OLDPWD=/home/miku/Codigos/CPP
+QT_QPA_PLATFORMTHEME=qt5ct
+GTK_MODULES=gail:atk-bridge
+GTK_IM_MODULE=ibus
+LANGUAGE=en_US:en
+DISPLAY=:1
+XDG_SESSION_DESKTOP=gnome
+SSH_AGENT_PID=2158
+POSH_PROMPT_COUNT=5
+XDG_SESSION_CLASS=user
+QT_ACCESSIBILITY=1
+GDM_LANG=en_US.UTF-8
+XDG_RUNTIME_DIR=/run/user/1000
+XDG_DATA_DIRS=/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
+POSH_CURSOR_COLUMN=1
+GIT_TRACE2_PARENT_SID=f959bb97-ea17-468d-8008-86b9a8acf98a
+LESS_TERMCAP_mb=[1;31m
+POWERLINE_COMMAND=oh-my-posh
+LANG=en_US.UTF-8
+SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
+GIT_EXEC_PATH=/usr/lib/git-core
+LESS_TERMCAP_me=[0m
+IM_CONFIG_PHASE=1
+DESKTOP_SESSION=gnome
+USERNAME=miku
+LESS_TERMCAP_ue=[0m
+VTE_VERSION=7003
+GDMSESSION=gnome
+MANAGERPID=1923
+LESS_TERMCAP_so=[01;33m
+LESS_TERMCAP_md=[1;36m
+POWERSHELL_TELEMETRY_OPTOUT=1
+JOURNAL_STREAM=8:28544
+QT_IM_MODULE=ibus
+POWERSHELL_UPDATECHECK=Off
+XDG_SESSION_TYPE=x11
+CONDA_PROMPT_MODIFIER=false
+TERM=xterm-256color
+_JAVA_OPTIONS=-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true
+WINDOWPATH=2
+GNOME_DESKTOP_SESSION_ID=this-is-deprecated
+XDG_MENU_PREFIX=gnome-
+LESS_TERMCAP_us=[1;32m
+HOME=/home/miku
+SHLVL=1
+PWD=/home/miku/Codigos/CPP
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+POSH_THEME=/home/miku/Documents/themes/themes/clean-detailed.omp.json
+LESS_TERMCAP_se=[0m
+XDG_CURRENT_DESKTOP=GNOME
+LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.swp=00;90:*.tmp=00;90:*.dpkg-dist=00;90:*.dpkg-old=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90::ow=30;44:
+GIO_LAUNCHED_DESKTOP_FILE_PID=10279
+POSH_CURSOR_LINE=24
+POSH_PID=10311
+QT_AUTO_SCREEN_SCALE_FACTOR=0
+LOGNAME=miku
+COLORTERM=truecolor
+GPG_AGENT_INFO=/run/user/1000/gnupg/S.gpg-agent:0:1
+XMODIFIERS=@im=ibus
+WINDOWID=81788931
+SHELL=/usr/bin/zsh
+DOTNET_CLI_TELEMETRY_OPTOUT=1
+INVOCATION_ID=0d1bff990fb64824a29bc6eb4a0702c0
+SYSTEMD_EXEC_PID=2463
+
+
+------------
+Diagnostic: File system
+Skipped: False
+Success: True
+Exception: None
+Log:
+Temporary directory is '/tmp/'...
+Checking basic file I/O...
+Writing to temporary file '/tmp/357f48ef92356382586f0f94'... OK
+Reading from temporary file '/tmp/357f48ef92356382586f0f94'... OK
+Deleting temporary file '/tmp/357f48ef92356382586f0f94'... OK
+Testing IFileSystem instance...
+UserHomePath: /home/miku
+UserDataDirectoryPath: /home/miku/.gcm
+GetCurrentDirectory(): /home/miku/Codigos/CPP
+
+------------
+Diagnostic: Networking
+Skipped: False
+Success: True
+Exception: None
+Log:
+Checking networking and HTTP stack...
+Creating HTTP client... OK
+IsNetworkAvailable: True
+Sending HEAD request to http://example.com... OK
+Sending HEAD request to https://example.com... OK
+Acquiring free TCP port... OK
+Testing local HTTP loopback connections...
+Creating new HTTP listener for http://localhost:35901/... OK
+Waiting for loopback connection... OK
+Writing response... OK
+Waiting for response data... OK
+Loopback connection data OK
+
+------------
+Diagnostic: Git
+Skipped: False
+Success: True
+Exception: None
+Log:
+Getting Git version... OK
+Git version is '2.39.2'
+Locating current repository... OK
+Git repository at '/home/miku/Codigos/CPP/.git'
+Listing all Git configuration... OK
+Git configuration:
+file:/home/miku/.gitconfig	credential.helper=store
+file:/home/miku/.gitconfig	credential.helper=
+file:/home/miku/.gitconfig	credential.helper=/usr/local/bin/git-credential-manager
+file:/home/miku/.gitconfig	user.name=NakanoMiku13
+file:/home/miku/.gitconfig	user.email=danielulrichtamayo@gmail.com
+file:/home/miku/.gitconfig	credential.https://dev.azure.com.usehttppath=true
+file:.git/config	core.repositoryformatversion=0
+file:.git/config	core.filemode=true
+file:.git/config	core.bare=false
+file:.git/config	core.logallrefupdates=true
+file:.git/config	remote.origin.url=https://github.com/NakanoMiku13/CPP.git
+file:.git/config	remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+file:.git/config	branch.main.remote=origin
+file:.git/config	branch.main.merge=refs/heads/main
+
+
+------------
+Diagnostic: Credential storage
+Skipped: False
+Success: False
+Exception:
+System.Exception: No credential store has been selected.
+
+Set the GCM_CREDENTIAL_STORE environment variable or the credential.credentialStore Git configuration setting to one of the following options:
+
+  secretservice : freedesktop.org Secret Service (requires graphical interface)
+  gpg           : GNU `pass` compatible credential storage (requires GPG and `pass`)
+  cache         : Git's in-memory credential cache
+  plaintext     : store credentials in plain-text files (UNSECURE)
+
+See https://aka.ms/gcm/credstores for more information.
+
+   at GitCredentialManager.CredentialStore.EnsureBackingStore()
+   at GitCredentialManager.CredentialStore.Remove(String service, String account)
+   at GitCredentialManager.Diagnostics.CredentialStoreDiagnostic.RunInternalAsync(StringBuilder log, IList`1 additionalFiles)
+   at GitCredentialManager.Diagnostics.Diagnostic.RunAsync()
+Log:
+ICredentialStore instance is of type: CredentialStore
+Writing test credential...Deleting test credential...
+------------
+Diagnostic: Microsoft authentication (AAD/MSA)
+Skipped: False
+Success: True
+Exception: None
+Log:
+Broker not supported.
+Flow type is: Auto
+Gathering MSAL token cache data... OK
+CacheDirectory: /home/miku/.local/.IdentityService
+CacheFileName: msal.cache
+CacheFilePath: /home/miku/.local/.IdentityService/msal.cache
+KeyringCollection: 
+KeyringSchemaName: 
+KeyringSecretLabel: 
+KeyringAttribute1: (,)
+KeyringAttribute2: (,)
+Creating cache helper... OK
+Verifying MSAL token cache persistence... OK
+
+------------
+Diagnostic: GitHub API
+Skipped: False
+Success: True
+Exception: None
+Log:
+Using 'https://github.com/' as API target.
+Querying '/meta' endpoint... OK
+
