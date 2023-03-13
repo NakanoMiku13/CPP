@@ -295,7 +295,7 @@ auto main()->int{
     map<string,bool> verification;
     for(auto i : alphabet) verification[i] = true;
     string string1 = setString(alphabet, verification), string2 = setString(alphabet,verification);
-    vector<string> language1 = generateLanguage(alphabet), language2 = generateLanguage(alphabet), difference = differenceBetweenLanguages(language1,language2), prefixes = getPrefixes(string1),suffixes = getSuffixes(string1),subSets = getSubSets(string1),alphabetPower; 
+    vector<string> language1 = generateLanguage(alphabet), language2 = generateLanguage(alphabet), difference = differenceBetweenLanguages(language1,language2), prefixes = getPrefixes(string2),suffixes = getSuffixes(string2),subSets = getSubSets(string1),alphabetPower; 
     pair<vector<string>,vector<string>> types = determineType(suffixes,prefixes,string1);
     if(prefixes.size() == 0) cout<<"There no exist prefixes between "<<string1<<" and "<<string2<<endl;
     else{
