@@ -1,6 +1,8 @@
 #include<bits/stdc++.h>
 #include<unistd.h>
 using namespace std;
+vector<vector<int>> lab,temp;
+int steps, height, width;
 auto printMap(vector<vector<int>> lab,int x, int y)->void{
     for(int i = 0 ; i < lab.size() ; i++){
         for(int j = 0 ; j < lab[i].size() ; j++){
@@ -10,24 +12,28 @@ auto printMap(vector<vector<int>> lab,int x, int y)->void{
         cout<<endl;
     }
 }
-vector<vector<int>> lab;
+auto fillEmpty(int h, int w)->void{
+    for(int i = 0 ; i < h ; i++) for(int j = 0 ; j < w ; j++) lab[i][j] = 2;
+}
 auto findExit(const int x,const int y, pair<int,int>* exit,queue<pair<int,int>> flags)->void{
     if(lab[y][x] == 3 or lab[y+1][x] == 3 or lab[y-1][x] == 3 or lab[y][x+1] == 3 or lab[y][x-1] == 3) {
-        cout<<"Exit"<<endl;
         exit->first = x;
         exit->second = y;
-        flags = queue<pair<int,int>>();
+        while(!flags.empty()) flags.pop();
+        temp = lab;
+        fillEmpty(height,width);
         return;
     }
     else{
+        steps++;
         if(lab[y][x] == 1){
             lab[y][x] = 0;
             cout<<"X: "<<x<<" Y: "<<y<<endl;
-            cout<<"Flags: "<<flags.size()<<endl;
+            cout<<"Flags: "<<flags.size()<<" Steps: "<<steps<<endl;
             printMap(lab,x,y);
-            sleep(1);
+            usleep(50000);
             system("clear");
-            if(!flags.empty()){
+            if(!flags.empty() && lab[y-1][x] != 1 && lab[y+1][x] != 1 && lab[y][x+1] != 1 && lab[y][x-1] != 1){
                 while(!flags.empty()){
                     auto coords = flags.front();
                     findExit(coords.first,coords.second,exit,flags);
@@ -102,21 +108,63 @@ auto findExit(const int x,const int y, pair<int,int>* exit,queue<pair<int,int>> 
         }
     }
 }
+auto createProcedureMap()->vector<vector<int>>{
+    vector<vector<int>> labyrinth;
+    int height = rand() % 50 + 8, width = height;
+    for(int i = 0 ; i < height; i++){
+        vector<int> row;
+        if(i == 0 or i == height -1) for(int j = 0 ; j < width ; row.push_back(2), j++);
+        else{
+            row.push_back(2);
+            for(int j = 1 ; j < width -1 ; j++) row.push_back(1);
+            row.push_back(2);
+        }
+        labyrinth.push_back(row);
+    }
+    //Setting exit
+    int exitX = rand() % width - 1, exitY = rand() % height - 1;
+    labyrinth[exitY][exitX] = 3;
+    //Setting other walls
+    for(int i = 0 ; i < height ; i++){
+        if(i == 0 or i == height) continue;
+        else {
+            for(int j = 0 ; j < width ;){
+                int trap = rand() % 3;
+                //if(i != 1 && j != 1)
+                switch(trap){
+                    case 0: if(labyrinth[i][j] == 1) labyrinth[i][j] = 2; j++; break;
+                    case 1: j++; break;
+                    default: j++; break;
+                }
+            }
+        }
+    }
+    if(exitY + 1 < height) labyrinth[exitY+1][exitX] = 1;
+    if(exitY - 1 > 0) labyrinth[exitY-1][exitX] = 1;
+    if(exitX + 1 < height) labyrinth[exitY][exitX+1] = 1;
+    if(exitX - 1 > 0) labyrinth[exitY][exitX-1] = 1;
+    if(exitY + 1 < height) if(exitX + 1 < height) labyrinth[exitY+1][exitX+1] = 1;
+    if(exitY + 1 < height) if(exitX - 1 > 0) labyrinth[exitY+1][exitX-1] = 1;
+    if(exitY - 1 > 0) if(exitX + 1 < height) labyrinth[exitY-1][exitX+1] = 1;
+    if(exitX - 1 > 0) if(exitX - 1 > 0) labyrinth[exitY-1][exitX-1] = 1;
+    if(labyrinth[1][1] == 2) labyrinth[1][1] = 1;
+    return labyrinth;
+}
 auto main()->int{
-    int width = 8, height = 8;
-    lab = {
-        {2,2,2,2,2,2,2,2},
-        {2,1,2,2,1,2,3,2},
-        {2,1,1,1,1,1,1,2},
-        {2,2,2,1,1,2,1,2},
-        {2,1,1,1,2,2,2,2},
-        {2,2,1,2,1,1,1,2},
-        {2,1,1,1,1,2,1,2},
-        {2,2,2,2,2,2,2,2}
-    };
-    pair<int,int> exit;
+    srand(time(NULL));
+    lab = createProcedureMap();
+    temp = lab;
+    width = lab.size(), height = width ;
+    pair<int,int> exit = pair<int,int>({0,0});
     queue<pair<int,int>> flags;
     findExit(1,1,&exit,flags);
-    cout<<"Exit: X: "<<exit.first<<" Y: "<<exit.second;
+    if(exit.first == 0 && exit.second == 0){
+        cout<<"There no exist exit"<<endl;
+        printMap(temp,exit.first,exit.second);
+        return 0;
+    }
+    cout<<"Exit: X: "<<exit.first<<" Y: "<<exit.second<<endl;
+    cout<<"Steps: "<<steps<<" Height: "<<height<<" Width: "<<width<<endl;
+    printMap(temp,exit.first,exit.second);
     return 0;
 }
