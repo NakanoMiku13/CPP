@@ -26,18 +26,12 @@ auto quickSort(vector<type> arr)->vector<type>{
         }
     }else{
         type pivot = arr[arr.size() - 1];
-        cout<<"\nPivot: "<<pivot<<endl;
         vector<type> right,left;
         for(int i = 0 ; i < arr.size()-1 ; i++){
             step1++;
             if(arr[i] < pivot) right.push_back(arr[i]);
             else if(arr[i] > pivot) left.push_back(arr[i]);
         }
-        cout<<"Left: ";
-        for(auto i : left) cout<<i<<" ";
-        cout<<endl<<"Right: ";
-        for(auto i : right) cout<<i<<" ";
-        cout<<endl<<endl;
         return concat(quickSort(left),pivot,quickSort(right));
     }
 }
