@@ -55,16 +55,7 @@ auto bucketSort(vector<T> arr,const T maxi)->vector<T>{
             else if( i < keys[2]) { buckets[keys[2]].push_back(i);}
             else if( i < keys[3]) { buckets[keys[3]].push_back(i);}
             else{ buckets[keys[4]].push_back(i);}
-            /*if( i < keys[0]){ buckets[keys[0]].push_back(i); maxis[0] = max(maxis[0],i);}
-            else if( i < keys[1]) { buckets[keys[1]].push_back(i); maxis[1] = max(maxis[1],i);}
-            else if( i < keys[2]) { buckets[keys[2]].push_back(i); maxis[2] = max(maxis[2],i);}
-            else if( i < keys[3]) { buckets[keys[3]].push_back(i); maxis[3] = max(maxis[3],i);}
-            else{ buckets[keys[4]].push_back(i); maxis[4] = max(maxis[4],i);}*/
-        //Using quickSort
         for(auto key : keys) result = concat(result,quickSort(buckets[key]));
-        //Making it recursive
-        /*int k = 0;
-        for(auto key : keys){ result = concat(result,bucketSort(buckets[key],maxis[k])); k++; }*/
         return result;
     }
 }
