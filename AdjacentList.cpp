@@ -1,7 +1,15 @@
-#include<bits/stdc++.h>
+//#include<bits/stdc++.h>
+#include<iostream>
+//#include<pair>
 using namespace std;
 #define null NULL
 #define none null
+/*template<typename T1, typename T2> class pair{
+	public:
+		T1 first;
+		T2 second;
+		pair(T1 first = (T1)null, T2 second = (T2)null): first(first), second(second){}
+};*/
 template<typename T> using pointer = T*;
 template<typename T> class Node{
     private:
@@ -12,6 +20,12 @@ template<typename T> class Node{
         auto SetValue(T value)->void{
             _value = value;
         }
+	/*auto &operator->(){
+		return &_value;
+	}
+	auto operator*(){
+		return _value;
+	}*/
         auto GetValue()->T{
             return _value;
         }
@@ -32,6 +46,45 @@ template<typename T> class List{
     private:
         pointer<Node<T>> _head, _tail;
         size_t _size;
+/*	template<typename dataset> class _iterato>
+            private:
+                pointer<Node<dataset>> _current;
+            public:
+                _iterator(pointer<Node<dataset>> >
+                auto &operator++(){
+                    _current = _current->next;
+                    return _current;
+                }
+                auto operator++(int){
+                    auto retVal = *this;
+                    ++(*this);
+                    return retVal;
+                }
+                auto &operator--(){
+                    _current = _current->prev;
+                    return _current;
+                }
+                auto operator--(int){
+                    auto retVal = *this;
+                    --(*this);
+                    return retVal;
+                }
+		auto *operator->(){
+                    return &_current->value;
+                }
+                auto &operator*(){
+                    return _current->value;
+                }
+                auto operator==(const auto &self){
+                    return _current == self->_cur>
+                }
+                auto operator!=(const auto &self){
+                    return _current != self._curr>
+                }
+                auto dir(){
+                    return &_current->value;
+                }
+        };*/
     public:
         List(initializer_list<T> values = initializer_list<T>()): _head(nullptr), _tail(nullptr), _size(0){
             for(auto i : values) Add(i);
@@ -51,6 +104,7 @@ template<typename T> class List{
             }
             _size++;
         }
+	//auto &operator->(auto aux){ return &aux; }
         auto AddAt(T value, int index){
             pointer<Node<T>> newNode = new Node<T>(value);
             if(Empty()) Add(value);
@@ -80,6 +134,14 @@ template<typename T> class List{
                 }
             }
         }
+	auto ReplaceAt(T value, const int index){
+		if(Empty()) return;
+		else{
+			auto move = _head;
+			for(int i = 0 ; i < index ; i++, move = move->GetNext());
+			move->SetValue(value);
+		}
+	}
         auto RemoveLast()->void{
             if(Empty()) return;
             else{
@@ -105,7 +167,7 @@ template<typename T> class List{
                 for(auto i = 0 ; i < index ; i++, temp = temp->GetNext());
                 return temp->GetValue();
             }
-            return (T)null;
+            //return null;
         }
 };
 template<typename T> class AdjacentList{
@@ -125,7 +187,7 @@ template<typename T> class AdjacentList{
                 List<T> items = List<T>();
                 _connections.AddAt(items,value.second);
             }else{
-                
+               // _connections.Find
             }
         }
 };
@@ -139,4 +201,13 @@ auto main()->int{
     list.AddAt(1230, 13);
     list.PrintList();
     cout<<list.At(1);
+	List<List<int>> vals = List<List<int>>({{1,3,4},{7,8,9,0}});
+	auto L = vals.At(0);
+cout<<endl;
+	L.Add(189);
+	L.PrintList();
+	vals.ReplaceAt(L,0);
+	L = vals.At(0);
+	cout<<endl;
+	L.PrintList();
 }
