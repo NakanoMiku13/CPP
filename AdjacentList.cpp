@@ -1,213 +1,144 @@
-//#include<bits/stdc++.h>
 #include<iostream>
-//#include<pair>
 using namespace std;
 #define null NULL
 #define none null
-/*template<typename T1, typename T2> class pair{
-	public:
-		T1 first;
-		T2 second;
-		pair(T1 first = (T1)null, T2 second = (T2)null): first(first), second(second){}
-};*/
 template<typename T> using pointer = T*;
-template<typename T> class Node{
+template<typename T> class node{
     private:
         T _value;
-        pointer<Node> _next, _prev;
+        pointer<node> _next, _prev;
     public:
-        Node(T value = null, pointer<Node> next = nullptr, pointer<Node> prev = nullptr) : _value(value), _next(next), _prev(prev){}
-        auto SetValue(T value)->void{
+        node(T value = (T)null) : _value(value), _next(nullptr), _prev(nullptr){}
+        auto SetValue(T value) {
             _value = value;
         }
-	/*auto &operator->(){
-		return &_value;
-	}
-	auto operator*(){
-		return _value;
-	}*/
-        auto GetValue()->T{
-            return _value;
+        auto GetValue() {
+            return &_value;
         }
-        auto GetNext()->pointer<Node>{
-            return _next;
-        }
-        auto SetNext(pointer<Node> next)->void{
+        auto SetNext(pointer<node> next)  {
             _next = next;
         }
-        auto GetPrev()->pointer<Node>{
-            return _prev;
+        auto GetNext() {
+            return _next;
         }
-        auto SetPrev(pointer<Node> prev)->void{
+        auto SetPrev(pointer<node> prev) {
             _prev = prev;
+        }
+        auto GetPrev() {
+            return _prev;
         }
 };
 template<typename T> class List{
     private:
-        pointer<Node<T>> _head, _tail;
+        pointer<node<T>> _head, _tail;
         size_t _size;
-/*	template<typename dataset> class _iterato>
-            private:
-                pointer<Node<dataset>> _current;
-            public:
-                _iterator(pointer<Node<dataset>> >
-                auto &operator++(){
-                    _current = _current->next;
-                    return _current;
-                }
-                auto operator++(int){
-                    auto retVal = *this;
-                    ++(*this);
-                    return retVal;
-                }
-                auto &operator--(){
-                    _current = _current->prev;
-                    return _current;
-                }
-                auto operator--(int){
-                    auto retVal = *this;
-                    --(*this);
-                    return retVal;
-                }
-		auto *operator->(){
-                    return &_current->value;
-                }
-                auto &operator*(){
-                    return _current->value;
-                }
-                auto operator==(const auto &self){
-                    return _current == self->_cur>
-                }
-                auto operator!=(const auto &self){
-                    return _current != self._curr>
-                }
-                auto dir(){
-                    return &_current->value;
-                }
-        };*/
     public:
-        List(initializer_list<T> values = initializer_list<T>()): _head(nullptr), _tail(nullptr), _size(0){
-            for(auto i : values) Add(i);
-        }
-        auto Empty()->bool{
-            return (_size == 0) ? true : false;
-        }
-        auto Add(T value)->void{
-            pointer<Node<T>> newNode = new Node<T>(value);
-            if(Empty()){
-                _head = _tail = newNode;
-            }else{
-                auto temp = _tail;
+        List(initializer_list<T> ls = initializer_list<T>()) : _head(nullptr), _tail(nullptr), _size(0){ for(auto i : ls) Add(i);}
+        auto Empty() { return (_size == 0) ? true : false; }
+        auto &Front() { return *_head->GetValue(); }
+        auto &Tail() { return *_tail->GetValue(); }
+        auto Add(T value) {
+            pointer<node<T>> newNode = new node<T>(value);
+            if(Empty()) _head = _tail = newNode;
+            else{
+                if(value == (T)null) return;
+                newNode->SetPrev(_tail);
                 _tail->SetNext(newNode);
                 _tail = newNode;
-                _tail->SetPrev(temp);
             }
             _size++;
         }
-	//auto &operator->(auto aux){ return &aux; }
-        auto AddAt(T value, int index){
-            pointer<Node<T>> newNode = new Node<T>(value);
-            if(Empty()) Add(value);
-            else{
-                if(index == 0){
-                    auto temp = _head;
-                    newNode->SetNext(temp);
-                    _head = newNode;
-                    _size++;
-                }else if(index < _size){
-                    auto temp = _head;
-                    index--;
-                    for(int i = 0 ; i < index ; i++, temp = temp->GetNext());
-                    auto aux = temp->GetNext();
-                    if(temp->GetValue() == (T)null) aux->SetValue(value);
-                    else{
-                        newNode->SetNext(aux);
-                        temp->SetNext(newNode);
-                        cout<<endl<<_size<<endl;
-                        _size++;
-                    }
-                }else{
-                    // index = 8; size = 6
-                    // 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> null -> 8
-                    for(auto i = _size ; i < index ; i++) Add((T)null);
-                    Add(value);
-                }
-            }
-        }
-	auto ReplaceAt(T value, const int index){
-		if(Empty()) return;
-		else{
-			auto move = _head;
-			for(int i = 0 ; i < index ; i++, move = move->GetNext());
-			move->SetValue(value);
-		}
-	}
-        auto RemoveLast()->void{
+        auto Remove() {
             if(Empty()) return;
             else{
-                _size--;
-                auto t = _tail;
+                auto temp = _tail;
                 _tail = _tail->GetPrev();
-                _tail->SetNext(nullptr);
+                free(temp);
+                _size--;
             }
         }
-        auto PrintList()->void{
-            pointer<Node<T>> temp = _head;
-            for(auto i = 0 ; i < _size ; i++, temp = temp->GetNext()) if(temp->GetValue() == (T)null) cout<<-1<<" "; else cout<<temp->GetValue()<<" ";
-            cout<<endl;
-        }
-        auto Find(T value){
-            auto temp = _head;
-            for(auto i = 0 ; i < _size && temp->GetValue() != value ; i++, temp = temp->GetNext());
-            return (temp->GetValue() == value) ? temp : nullptr;
-        }
-        auto At(const int index){
-            if(index < _size){
-                auto temp = _head;
-                for(auto i = 0 ; i < index ; i++, temp = temp->GetNext());
-                return temp->GetValue();
+        auto Size() const { return _size; }
+        auto Length() const { return Size();}
+        auto Print() {
+            if(_head != nullptr and !Empty()){
+                pointer<node<T>> move = _head;
+                for(int i = 0 ; i < _size ; i++, move = move->GetNext()) cout<<*move->GetValue()<<" ";
             }
-            //return null;
         }
 };
 template<typename T> class AdjacentList{
     private:
-        pointer<pair<T,pointer<List<T>>>> _head, _tail;
-        List<List<T>> _connections;
+        pointer<node<List<T>>> _head, _tail;
         size_t _size;
     public:
-        AdjacentList(): _connections(List<T>()), _head(nullptr), _tail(nullptr), _size(0) {}
-        auto Empty()->bool{
-            return (_size == 0);
+        AdjacentList(initializer_list<pair<T,T>> initial = initializer_list<pair<T,T>>()): _head(nullptr), _tail(nullptr), _size(0){ for(auto i : initial) Add(i);}
+        auto Empty() const{
+            return _size == 0;
         }
-        auto Add(pair<T,T> value){
-            if(Empty()){
-                pointer<pair<T,pointer<List<T>>>> newNode = new pair<T,pointer<List<T>>>();
-                newNode->first = value.first;
-                List<T> items = List<T>();
-                _connections.AddAt(items,value.second);
-            }else{
-               // _connections.Find
+        auto Front() const {
+            return _head->GetValue();
+        }
+        auto Back() const {
+            return _tail->GetValue();
+        }
+        auto Size(){
+            return _size;
+        }
+        auto Length(){
+            return Size();
+        }
+        auto Find(T value)->pointer<node<List<T>>>{
+            if(Empty()) return nullptr;
+            else{
+                pointer<node<List<T>>> move = _head;
+                while(move != nullptr){
+                    List<T> val = *move->GetValue();
+                    if(val.Front() == value) return move;
+                    move = move->GetNext();
+                }
+                return nullptr;
+            }
+        }
+        auto Add(pair<T,T> value)->void{
+            if(value.first == (T)null) return;
+            else{
+                if(Empty()){
+                    pointer<node<List<T>>> newNode = new node<List<T>>({value.first, value.second});
+                    _head = _tail = newNode;
+                    _size++;
+                    Add({value.second,(T)null});
+                }
+                else{
+                    auto temp = Find(value.first);
+                    if(temp == nullptr){
+                        //cout<<value.first<<endl;
+                        pointer<node<List<T>>> newNode = new node<List<T>>({value.first, value.second});
+                        newNode->SetPrev(_tail);
+                        _tail->SetNext(newNode);
+                        _tail = newNode;
+                        _size++;
+                        Add({value.second,(T)null});
+                    }else{
+                        temp->GetValue()->Add(value.second);
+                    }
+                }
+            }
+        }
+        auto Print(){
+            auto move = _head;
+            while(move != nullptr){
+                move->GetValue()->Print();
+                cout<<endl;
+                move = move->GetNext();
             }
         }
 };
 auto main()->int{
-    List<int> list = List<int>({1,2,3,4,5,6,7,8});
-    list.PrintList();
-    list.AddAt(9, 15);
-    cout<<endl;
-    list.PrintList();
-    cout<<endl;
-    list.AddAt(1230, 13);
-    list.PrintList();
-    cout<<list.At(1);
-	List<List<int>> vals = List<List<int>>({{1,3,4},{7,8,9,0}});
-	auto L = vals.At(0);
-cout<<endl;
-	L.Add(189);
-	L.PrintList();
-	vals.ReplaceAt(L,0);
-	L = vals.At(0);
-	cout<<endl;
-	L.PrintList();
+    AdjacentList<int> list = AdjacentList<int>({{1,2},{3,4},{5,6},{7,8},{1,3},{3,4}});
+    list.Add({1,5});
+    list.Add({5,4});
+    list.Add({5,5});
+    list.Add({5,12});
+    list.Print();
+    return 0;
 }

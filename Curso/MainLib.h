@@ -133,12 +133,6 @@ template<typename data> class List{
             return t;
         }
         auto &operator[](const int index){
-            auto x = sizeof(pointer<node<data>>);
-            cout<<x<<" "<<sizeof(_head)<<" "<<sizeof(_head->next)<<endl;
-            cout<<&_head<<" "<<&_head->next<<" "<<&(_head->next->next)<<endl;
-            cout<<_head->value<<" "<<_head->next->value<<" "<<_head->next->next->value<<endl;
-            cout<<(&_head)+x+12<<" "<<(&_head) + sizeof(_head)<<endl;
-            cout<<&_head + (abs(&_head - &_head->next)*3)<<endl;
             auto t = _head;
             for(auto i = 0; i < index; i++, t = t -> next);
             return t->value;
