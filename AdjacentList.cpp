@@ -6,11 +6,18 @@ template<typename T> using pointer = T*;
 template<typename T> class node{
     private:
         T _value;
+        pointer<T> _position;
         pointer<node> _next, _prev;
     public:
-        node(T value = (T)null) : _value(value), _next(nullptr), _prev(nullptr){}
+        node(T value = (T)null) : _value(value), _next(nullptr), _prev(nullptr), _position(nullptr){}
         auto SetValue(T value) {
             _value = value;
+        }
+        auto SetPosition(pointer<T> position){
+            _position = position;
+        }
+        auto GetPosition(){
+            return _position;
         }
         auto GetValue() {
             return &_value;
@@ -104,6 +111,7 @@ template<typename T> class AdjacentList{
             else{
                 if(Empty()){
                     pointer<node<List<T>>> newNode = new node<List<T>>({value.first, value.second});
+                    newNode->SetPosition(newNode);
                     _head = _tail = newNode;
                     _size++;
                     Add({value.second,(T)null});
