@@ -111,7 +111,7 @@ template<typename T> class AdjacentList{
             else{
                 if(Empty()){
                     pointer<node<List<T>>> newNode = new node<List<T>>({value.first, value.second});
-                    newNode->SetPosition(newNode);
+                    //newNode->SetPosition(newNode);
                     _head = _tail = newNode;
                     _size++;
                     Add({value.second,(T)null});
@@ -143,6 +143,10 @@ template<typename T> class AdjacentList{
 };
 auto main()->int{
     AdjacentList<int> list = AdjacentList<int>({{1,2},{3,4},{5,6},{7,8},{1,3},{3,4}});
+    cout<<"Original nodes list: {1,2},{3,4},{5,6},{7,8},{1,3},{3,4}\n";
+    cout<<"Printing list:\n";
+    list.Print();
+    cout<<"\nAdding new Nodes:\n{1,5},{5,4},{5,5},{5,12}\n";
     list.Add({1,5});
     list.Add({5,4});
     list.Add({5,5});
