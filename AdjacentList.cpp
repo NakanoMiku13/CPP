@@ -3,7 +3,13 @@ using namespace std;
 #define null NULL
 #define none null
 template<typename T> using pointer = T*;
-template<typename T> class node{
+template<typename T1,typename T2> class Pair{
+    public:
+        T1 first;
+        T2 second;
+        Pair(T1 first = (T1)null, T2 second = (T2)null): first(first), second(second) {}
+};
+template<typename T > class node{
     private:
         T _value;
         pointer<node<T>> _position;
@@ -21,6 +27,9 @@ template<typename T> class node{
         }
         auto GetValue() {
             return &_value;
+        }
+        auto GetValuePosition(){
+            return _value;
         }
         auto SetNext(pointer<node> next)  {
             _next = next;
@@ -44,11 +53,14 @@ template<typename T> class List{
         auto Empty() { return (_size == 0) ? true : false; }
         auto &Front() { return *_head->GetValue(); }
         auto &Tail() { return *_tail->GetValue(); }
-        auto Add(T value) {
+        auto NodePosition() { return _head; }
+        auto Add(T value, pointer<node<T>> position = nullptr) {
             pointer<node<T>> newNode = new node<T>(value);
+            //newNode->SetPosition(position);
             if(Empty()) _head = _tail = newNode;
             else{
                 if(value == (T)null) return;
+                newNode->SetPosition(position);
                 newNode->SetPrev(_tail);
                 _tail->SetNext(newNode);
                 _tail = newNode;
@@ -67,9 +79,11 @@ template<typename T> class List{
         auto Size() const { return _size; }
         auto Length() const { return Size();}
         auto Print() {
+            T top = *_head->GetValue();
+            cout<<"\nList print ("<<top<<"):\n";
             if(_head != nullptr and !Empty()){
                 pointer<node<T>> move = _head;
-                for(int i = 0 ; i < _size ; i++, move = move->GetNext()) cout<<*move->GetValue()<<" ";
+                for(int i = 0 ; i < _size ; i++, move = move->GetNext()) cout<<*move->GetValue()<<endl;
             }
         }
 };
@@ -78,7 +92,7 @@ template<typename T> class AdjacentList{
         pointer<node<List<T>>> _head, _tail;
         size_t _size;
     public:
-        AdjacentList(initializer_list<pair<T,T>> initial = initializer_list<pair<T,T>>()): _head(nullptr), _tail(nullptr), _size(0){ for(auto i : initial) Add(i);}
+        AdjacentList(initializer_list<Pair<T,T>> initial = initializer_list<Pair<T,T>>()): _head(nullptr), _tail(nullptr), _size(0){ for(auto i : initial) Add(i);}
         auto Empty() const{
             return _size == 0;
         }
@@ -106,7 +120,7 @@ template<typename T> class AdjacentList{
                 return nullptr;
             }
         }
-        auto Add(pair<T,T> value)->void{
+        auto Add(Pair<T,T> value)->void{
             if(value.first == (T)null) return;
             else{
                 if(Empty()){
@@ -118,7 +132,6 @@ template<typename T> class AdjacentList{
                 else{
                     auto temp = Find(value.first);
                     if(temp == nullptr){
-                        //cout<<value.first<<endl;
                         pointer<node<List<T>>> newNode = new node<List<T>>({value.first, value.second});
                         newNode->SetPrev(_tail);
                         _tail->SetNext(newNode);
@@ -128,8 +141,17 @@ template<typename T> class AdjacentList{
                     }else{
                         temp->GetValue()->Add(value.second);
                     }
+                    //Setting the memory values
+                    pointer<node<List<T>>> move = _head;
+                    while(move != nullptr){
+                        auto listHead = move->GetValue()->NodePosition();
+                        while(listHead->GetNext() != nullptr){
+                            listHead->SetPosition(Find(*listHead->GetValue())->GetValue()->NodePosition());
+                            listHead = listHead->GetNext();
+                        }
+                        move = move->GetNext();
+                    }
                 }
-                
             }
         }
         auto Print(){
