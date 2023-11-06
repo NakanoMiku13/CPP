@@ -84,6 +84,13 @@ reservedWords = {
     pair<string, bool>("switch", true),
     pair<string, bool>("case", true),
     pair<string, bool>("break", true)
+},
+controlStructures = {
+    pair<string, bool>("while", true),
+    pair<string, bool>("for", true),
+    pair<string, bool>("if", true),
+    pair<string, bool>("else", true),
+    pair<string, bool>("switch", true)
 };
 stack <map<string,string>> tempVariables = stack<map<string,string>>();
 map<string,string> variablesDeclaration = map<string, string>();
@@ -127,10 +134,78 @@ auto RemoveCharacter(char character, string text)->string{
     for(auto i : text) if(i != character) newString += i;
     return newString;
 }
-auto VariableExists(string assign, string datatype, int funcEval = 0)->bool{
-    if(variablesDeclaration[assign] != "" and (variablesDeclaration[assign] != datatype or variablesDeclaration[assign] == datatype)) return true;
-    if(funcEval == 0) variablesDeclaration[assign] = datatype;
+auto ExistTempVariable(string name, string datatype) -> bool{
+    stack <map<string,string>> tempVariables2 = tempVariables;
+    while(!tempVariables2.empty()){
+        map<string,string> variables = tempVariables2.top();
+        if(variables[name] != "" and (variablesDeclaration[name] != "" and (variablesDeclaration[name] != datatype or variablesDeclaration[name] == datatype or reservedWords[name]))) return true;
+        tempVariables2.pop();
+    }
+    if(tempVariables.size() > 0){
+        map<string,string> variables = tempVariables.top();
+        variables[name] = datatype;
+        tempVariables.pop();
+        tempVariables.push(variables);
+    }else{
+        map<string,string> variables = map<string,string>();
+        variables[name] = datatype;
+        tempVariables.push(variables);
+    }
     return false;
+}
+auto VariableExists(string assign, string datatype, int funcEval = 0)->bool{
+    if(variablesDeclaration[assign] != "" and (variablesDeclaration[assign] != datatype or variablesDeclaration[assign] == datatype or reservedWords[assign])) return true;
+    if(funcEval == 0) variablesDeclaration[assign] = datatype;
+    else if(funcEval == 1) return ExistTempVariable(assign, datatype);
+    return false;
+}
+auto IsCasted(string datatype, string expectedDatatype) -> bool{
+    map<string, bool> casted = {
+        pair<string, bool>("short", true),
+        pair<string, bool>("unsigned short", true),
+        pair<string, bool>("int", true),
+        pair<string, bool>("unsigned int", true),
+        pair<string, bool>("long", true),
+        pair<string, bool>("unsigned long", true),
+        pair<string, bool>("long long", true),
+        pair<string, bool>("unsigned long long", true),
+        pair<string, bool>("float", true),
+        pair<string, bool>("double", true),
+        pair<string, bool>("bool", true),
+        pair<string, bool>("long double", true)
+    }, casted1 = {
+        pair<string, bool>("string", true)
+    }, casted2 = {
+        pair<string, bool>("char", true)
+    };
+    return (casted1[datatype] and casted1[expectedDatatype]) or (casted2[datatype] and casted2[expectedDatatype]) or (casted[datatype] and casted[expectedDatatype]);
+}
+auto ExistTempVariable2(string name, string expectedDatatype) -> bool {
+    stack <map<string,string>> tempVariables2 = tempVariables;
+    while(!tempVariables2.empty()){
+        map<string,string> variables = tempVariables2.top();
+        if(variables[name] != "" and !reservedWords[name] and IsCasted(variables[name], expectedDatatype)) return true;
+        tempVariables2.pop();
+    }
+    return false;
+}
+auto ExistVariable(string name) -> bool{
+    if(variablesDeclaration[name] != "") return true;
+    else{
+        stack <map<string,string>> tempVariables2 = tempVariables;
+        while(!tempVariables2.empty()){
+            map<string,string> variables = tempVariables2.top();
+            if(variables[name] != "" and !reservedWords[name]) return true;
+            tempVariables2.pop();
+        }
+    }
+    return false;
+}
+auto VerifyOperation(string line){
+
+}
+auto ContainsOperator(string line) -> bool{
+    
 }
 auto VerifyAssignment(string line, string datatype, string regexExpression, int lineNumber, int funcEval = 0) -> string{
     if(Contains(",", line)){
@@ -142,13 +217,14 @@ auto VerifyAssignment(string line, string datatype, string regexExpression, int 
                 //Evaluate all expression and value
                 vector<string> temp = Split('=', RemoveCharacter(' ', RemoveCharacter(';', assign)));
                 if(!regex_match(temp[0], regex(variableExpression))) return "Error in line: "+to_string(lineNumber)+"\nThe variable name do not correspond to the rules\n";
-                if(!regex_match(temp[1], regex(regexExpression))) return "Error in line "+to_string(lineNumber)+"\nThe assignment do not correspond to a "+datatype+" datatype\n";
-                if (VariableExists(temp[0], datatype, funcEval)) return "Error in line: "+to_string(lineNumber)+"\nThe variable "+temp[0]+" already exists\n";
+                if(!regex_match(temp[1], regex(regexExpression)))
+                    if(!ExistTempVariable2(temp[1], datatype) and variablesDeclaration[temp[1]] != datatype and !IsCasted(variablesDeclaration[temp[1]],datatype)) return "Error in line "+to_string(lineNumber)+"\nThe assignment do not correspond to a "+datatype+" datatype\n";
+                if (ExistTempVariable2(temp[0], datatype) or VariableExists(temp[0], datatype, funcEval)) return "Error in line: "+to_string(lineNumber)+"\nThe variable "+temp[0]+" already exists\n";
             }else{
                 if(reservedWords[assign] or datatypes[assign]) return "Error in line: "+to_string(lineNumber)+"\nYou can not use reserved word as a variable name\n";
                 //Evaluate variable name
                 if(!regex_match(assign, regex(variableExpression))) return "Error in line: "+to_string(lineNumber)+"\nThe variable name do not correspond to the rules\n";
-                else if(VariableExists(assign, datatype, funcEval)) return "Error in line: "+to_string(lineNumber)+"\nThe variable "+assign+" already exists\n";
+                else if(ExistTempVariable2(assign, datatype) or VariableExists(assign, datatype, funcEval)) return "Error in line: "+to_string(lineNumber)+"\nThe variable "+assign+" already exists\n";
             }
         }
     }else{
@@ -158,14 +234,15 @@ auto VerifyAssignment(string line, string datatype, string regexExpression, int 
             vector<string> temp = Split('=', RemoveCharacter(' ', RemoveCharacter(';', line)));
             if(reservedWords[temp[0]] or datatypes[temp[0]]) return "Error in line: "+to_string(lineNumber)+"\nYou can not use reserved word as a variable name\n";
             if(!regex_match(temp[0], regex(variableExpression))) return "Error in line: "+to_string(lineNumber)+"\nThe variable name do not correspond to the rules\n";
-            if(!regex_match(temp[1], regex(regexExpression))) return "Error in line "+to_string(lineNumber)+"\nThe assignment do not correspond to a "+datatype+" datatype\n";
-            if (VariableExists(temp[0], datatype, funcEval))  return "Error in line: "+to_string(lineNumber)+"\nThe variable "+temp[0]+" already exists\n";
+            if(!regex_match(temp[1], regex(regexExpression)))
+                if(!ExistTempVariable2(temp[1], datatype) and variablesDeclaration[temp[1]] != datatype and !IsCasted(variablesDeclaration[temp[1]],datatype)) return "Error in line "+to_string(lineNumber)+"\nThe assignment do not correspond to a "+datatype+" datatype\n";
+            if (ExistTempVariable2(temp[0], datatype) or VariableExists(temp[0], datatype, funcEval))  return "Error in line: "+to_string(lineNumber)+"\nThe variable "+temp[0]+" already exists\n";
         }else{
             // Without assignation
             string line2 = RemoveCharacter(';', line);
             if(reservedWords[line2] or datatypes[line2]) return "Error in line: "+to_string(lineNumber)+"\nYou can not use reserved word as a variable name\n";
             if(!regex_match(line2, regex(variableExpression))) return "Error in line: "+to_string(lineNumber)+"\nThe variable name do not correspond to the rules\n";
-            if(VariableExists(line2, datatype, funcEval))  return "Error in line: "+to_string(lineNumber)+"\nThe variable "+line2+" already exists\n";
+            if(ExistTempVariable2(line2, datatype) or VariableExists(line2, datatype, funcEval))  return "Error in line: "+to_string(lineNumber)+"\nThe variable "+line2+" already exists\n";
         }
     }
     return "";
@@ -197,20 +274,20 @@ auto VerifyAssignmentValueIntegersFloats(string line, string datatype) -> string
     }
     return "";
 }
-auto VerifyVariableExpression(string line, string datatype, int lineNumber) -> pair<bool, string> {
+auto VerifyVariableExpression(string line, string datatype, int lineNumber, int funcEval = 0) -> pair<bool, string> {
     if(datatypes[datatype]){
         if(datatype == "bool"){
-            string output = VerifyAssignment(line, datatype, boolAssignments, lineNumber);
+            string output = VerifyAssignment(line, datatype, boolAssignments, lineNumber, funcEval);
             if(output != "") return pair<bool, string>(false, output);
         }else if(datatype == "char"){
-            string output = VerifyAssignment(line, datatype, charAssignments, lineNumber);
+            string output = VerifyAssignment(line, datatype, charAssignments, lineNumber, funcEval);
             if(output != "") return pair<bool, string>(false, output);
         }else if(datatype == "unsigned char"){
 
         }else if(datatype == "unsigned short"){
 
         }else if(datatype == "short" or datatype == "int" or datatype == "long" or datatype == "float" or datatype == "double"){
-            string output = VerifyAssignment(line, datatype, numberAssignment, lineNumber);
+            string output = VerifyAssignment(line, datatype, numberAssignment, lineNumber, funcEval);
             if(output != "") return pair<bool, string>(false, output);
             output = VerifyAssignmentValueIntegersFloats(line, datatype);
             if(output != "") return pair<bool, string>(false, "Error in line: "+to_string(lineNumber)+" "+ output);
@@ -224,7 +301,7 @@ auto VerifyVariableExpression(string line, string datatype, int lineNumber) -> p
         }else if(datatype == "wchar_t"){
 
         }else if(datatype == "string"){
-            string output = VerifyAssignment(line, datatype, stringAssignment, lineNumber);
+            string output = VerifyAssignment(line, datatype, stringAssignment, lineNumber, funcEval);
             if(output != "") return pair<bool, string>(false, output);
         }else{
             return pair<bool,string>(false, "Error in line "+to_string(lineNumber)+"\nThe datatype do not correspond to a variable datatype\n");
@@ -255,22 +332,18 @@ auto VerifyFunctionArguments(string arguments, const int lineNumber) -> pair<boo
         }else{
             string err = VerifyAssignment(variableName, datatype, variableExpression, lineNumber, 1);
             if(err != "") return pair<bool,string>(false, err);
-            variables[variableName] = datatype;
         }
     }
-    tempVariables.push(variables);
     return pair<bool,string>(true, "");
 }
-
 auto VerifyBlankLine(const string line) -> bool{
     int count = 0;
     for(auto i : line) if ( i == ' ' or i == '\n' or i == '\t' or i == NULL ) count ++;
     return count == line.size();
 }
-
 auto ReadFile(string fileName) -> bool{
     bool existMain = false, isFunction = false;
-    int line = 0, openKey = 0;
+    int line = 1, openKey = 0;
     try{
         if(!Contains(".cpp",fileName)) throw runtime_error("The file have to be with extention .cpp");
         ifstream file(fileName);
@@ -279,7 +352,7 @@ auto ReadFile(string fileName) -> bool{
             bool comment = false;
             string output;
             while(getline(file, output)){
-                output = RemoveCharacter('\t', output);
+                output = RemoveCharacter('\t', RemoveCharacter('\n',output));
                 if(output.size() > 0){
                     // Verifying if exist a libary
                     if(!Contains("//", output) and !comment){
@@ -294,7 +367,7 @@ auto ReadFile(string fileName) -> bool{
                                         throw runtime_error("Error in line "+to_string(line)+"\nThe library "+output+" must exist on the repository");
                                     }
                                 }else{
-                                    // Two cases variables of functions
+                                    // Two cases variables or functions
                                     if(Contains(";", output)){
                                         // Global Variables
                                         vector<string> split = Split(' ',output,1);
@@ -327,8 +400,49 @@ auto ReadFile(string fileName) -> bool{
                                 }
                             }else{
                                 // Evaluate content of a function
+                                if(Contains(";", output)){
+                                    // Local Variables
+                                    // Verify in variable assignments that can match with the variables declared previously on the stack
+                                    vector<string> split = Split(' ',output,1);
+                                    if(datatypes[split[0]]){
+                                        auto t = VerifyVariableExpression(split[1], split[0], line, 1);
+                                        if(!t.first) throw runtime_error(t.second);
+                                    }else{
+                                        // Verify if its a simple assignation
+                                        if(Contains("=", output)){
+                                            split = Split('=', RemoveCharacter(' ', RemoveCharacter(';', output)), 1);
+                                            string var1 = split[0], var2 = split[1];
+                                            if(!ExistVariable(var1) or !ExistVariable(var2)) throw runtime_error("Error in line "+to_string(line)+"\nOne of the variables do not exists or is incorrect");
+                                            else{
+                                                // Verify possible operations
+
+                                            }
+                                        }else{
+                                            if()
+                                            throw runtime_error("Error in line "+to_string(line)+"\nThe datatype: "+split[0]+" do not exists");
+                                        }
+                                    }
+                                }else if(Contains("{", output)){
+                                    // Functions
+                                    vector<string> split = Split(' ',output,1);
+                                    if(datatypes[split[0]]){
+                                        // Separate () from the function and get the name
+                                        vector<string> iter = Split('(', split[1]);
+                                        string args = iter[1], funcName = iter[0];
+                                        auto t = VerifyVariableExpression(funcName, split[0], line);
+                                        if(!t.first) throw runtime_error(t.second);
+                                        t = VerifyFunctionArguments(args, line);
+                                        if(!t.first) throw runtime_error(t.second);
+                                        isFunction = true;
+                                        openKey ++;
+                                    }else{
+                                        // Evaluate control structures | Reserved words | simple assignations
+                                        throw runtime_error("Error in line "+to_string(line)+"\nThe datatype: "+split[0]+" do not exists");
+                                    }
+                                }else{
+
+                                }
                             }
-                            
                         }
                     }
                     else{
@@ -349,6 +463,14 @@ auto main(int args, char* arguments[])->int{
         system("clear");
         if(ReadFile(arguments[i])) cout << "Compilation success\n";
         else cout << "Error while compiling\n";
+    }
+    int c = 0;
+    while(!tempVariables.empty()){
+        cout << "Dict: " << c++ << endl;
+        for(auto i : tempVariables.top()){
+            cout << i.first << " " << i.second << endl;
+        }
+        tempVariables.pop();
     }
     return 0;
 }

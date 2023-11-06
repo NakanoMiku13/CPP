@@ -11,9 +11,12 @@ string hola = "";
 int asdf = 1;
 float t = 19.2;
 double y = 0.98;
-int main(double a, double b, int c){
+int main(double a, double b, int c, char x){
 
-        int a = 0;
-    
+        int z = c;
+        c = z + 1;
+        if(a < b){
+            c = b;
+        }
     return 0;
 }
