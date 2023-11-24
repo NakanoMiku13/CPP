@@ -14,7 +14,16 @@ double y = 0.98;
 int main(double a, double b, int c, char x){
 
         int z = c;
-        c = z + 1;
+        c = z + y;
+        c = 1 + 2;
+        c += 1;
+        c++;
+        --c;
+        c--;
+        ++c;
+        hola++;
+        cout<<2<<endl;
+        z = a + b - c / (2 + a);
         if(a < b){
             c = b;
         }

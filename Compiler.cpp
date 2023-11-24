@@ -83,7 +83,13 @@ reservedWords = {
     pair<string, bool>("else", true),
     pair<string, bool>("switch", true),
     pair<string, bool>("case", true),
-    pair<string, bool>("break", true)
+    pair<string, bool>("break", true),
+    pair<string, bool>("endl", true),
+    pair<string, bool>("using", true),
+    pair<string, bool>("namespace", true),
+    pair<string, bool>("class", true),
+    pair<string, bool>("struct", true),
+    pair<string, bool>("template", true)
 },
 controlStructures = {
     pair<string, bool>("while", true),
@@ -111,6 +117,11 @@ auto Split(char character, string text, int steps = 10000)->vector<string>{
         }
     }
     items.push_back(temp);
+    return items;
+}
+auto SplitByString(string base, string text, int steps = 10000)->vector<string>{
+    vector<string> items = vector<string>();
+    
     return items;
 }
 auto Contains(string subsequence, string text)->bool{
@@ -200,9 +211,6 @@ auto ExistVariable(string name) -> bool{
         }
     }
     return false;
-}
-auto VerifyOperation(string line){
-
 }
 auto ContainsOperator(string line) -> bool{
     
@@ -341,6 +349,101 @@ auto VerifyBlankLine(const string line) -> bool{
     for(auto i : line) if ( i == ' ' or i == '\n' or i == '\t' or i == NULL ) count ++;
     return count == line.size();
 }
+auto ContainsMultipleOperators(string line) -> bool{
+    int count = 0;
+    for(auto let : line){
+        if(count >= 2) return true;
+        switch(let){
+            case '+': count++; break;
+            case '-': count++; break;
+            case '*': count++; break;
+            case '/': count++; break;
+            case '%': count++; break;
+        }
+    }
+    return false;
+}
+auto VerifyComplexAssignation(string line) -> bool{
+    return (Contains("/=", line) or Contains("+=", line) or Contains("*=", line) or Contains("-=", line) or Contains("%=", line));
+}
+auto GetDatatype(string line)->string{
+    string datatype = "";
+    if(regex_match(line, regex(boolAssignments))) datatype = "bool";
+    else if(regex_match(line, regex(charAssignments))) datatype = "char";
+    else if(regex_match(line, regex(stringAssignment))) datatype = "string";
+    else if(Contains(".", line) and line.size() < 16) datatype = "float";
+    else if(Contains(".", line) and line.size() > 16) datatype = "double";
+    else if(regex_match(line, regex(numberAssignment)) and line.size() <= 10) datatype = "int";
+    else if(regex_match(line, regex(numberAssignment)) and line.size() > 10) datatype = "long";
+    else{
+        // Verify variable datatype
+        if(tempVariables.size() > 0){
+            // Is on a function
+            if(variablesDeclaration[line] != "") datatype = variablesDeclaration[line];
+            else{
+                stack <map<string,string>> tempVariables2 = tempVariables;
+                while(!tempVariables2.empty()){
+                    map<string,string> variables = tempVariables2.top();
+                    if(variables[line] != "" and !reservedWords[line]){
+                        datatype = variables[line];
+                        break;
+                    }
+                    tempVariables2.pop();
+                }
+            }
+        }else{
+            // Is not on a function
+            if(variablesDeclaration[line] != "") datatype = variablesDeclaration[line];
+        }
+    }
+    return datatype != "" ? datatype : "null";
+}
+auto VerifySingleOperation(string var1, string var2, char operand) -> bool{
+    string datatype1 = GetDatatype(var1), datatype2 = GetDatatype(var2);
+    return IsCasted(datatype1,datatype2);
+}
+auto VerifyIncrement(string line) -> string{
+    line = RemoveCharacter(';', line);
+    string begin = "(\\+\\+|\\-\\-)"+variableExpression, end = variableExpression+"(\\+\\+|\\-\\-)";
+    string var = "";
+    if(regex_match(line, regex(begin))) var = Contains("-", line) ? EraseWhileExists(line, '-') : EraseWhileExists(line, '+');
+    else if(regex_match(line, regex(end))) var = Contains("-", line) ? RemoveCharacter('-', line) : RemoveCharacter('+', line);
+    string datatype = GetDatatype(var);
+    if(datatype == "null") return "There is no a valid datatype";
+    else return ExistVariable(var) and (VerifySingleOperation(var, "1", '+') or VerifySingleOperation(var, "1", '-')) ? "" : "Is not a variable to make the operation";
+}
+auto SplitByString(string separator, string content) -> vector<string>{
+    //Gramaticas ambiguas y libres de contexto
+    vector<string> splits = vector<string>();
+    string buffer = "";
+    for(int i = 0; i < content.size() ; i++){
+        if(content[i] == separator[0]){
+            bool complete = true;
+            int j = 0;
+            for( ; j < separator.size() && j + i < content.size() ; j++)
+                if(content[i + j] != separator[j]){
+                    complete = false;
+                    break;
+                }
+            if(complete){
+                splits.push_back(buffer);
+                buffer = "";
+                i += j + 1;
+            }
+        }
+        buffer += content[i];
+    }
+    splits.push_back(buffer);
+    return splits;
+}
+auto VerifyStructControl(string line) -> pair<string, bool>{
+    if(Contains("if(", line)) return pair<string, bool>("if", true);
+    if(Contains("for(", line)) return pair<string, bool>("for", true);
+    if(Contains("while(", line)) return pair<string, bool>("while", true);
+    if(Contains("switch(", line)) return pair<string, bool>("switch", true);
+    return pair<string, bool>("", false);
+    //if(Contains("if(")) return pair<string, bool>("if", true);
+}
 auto ReadFile(string fileName) -> bool{
     bool existMain = false, isFunction = false;
     int line = 1, openKey = 0;
@@ -399,8 +502,13 @@ auto ReadFile(string fileName) -> bool{
                                     }
                                 }
                             }else{
+                                // Evaluate control structures
+                                pair<string, bool> control = VerifyStructControl(output);
+                                if(control.second){
+                                    cout << control.first << endl;
+                                }
                                 // Evaluate content of a function
-                                if(Contains(";", output)){
+                                else if(Contains(";", output)){
                                     // Local Variables
                                     // Verify in variable assignments that can match with the variables declared previously on the stack
                                     vector<string> split = Split(' ',output,1);
@@ -410,16 +518,63 @@ auto ReadFile(string fileName) -> bool{
                                     }else{
                                         // Verify if its a simple assignation
                                         if(Contains("=", output)){
-                                            split = Split('=', RemoveCharacter(' ', RemoveCharacter(';', output)), 1);
-                                            string var1 = split[0], var2 = split[1];
-                                            if(!ExistVariable(var1) or !ExistVariable(var2)) throw runtime_error("Error in line "+to_string(line)+"\nOne of the variables do not exists or is incorrect");
-                                            else{
-                                                // Verify possible operations
-
+                                            if(VerifyComplexAssignation(output)){
+                                                // Complex Assignation
+                                                /*if(Contains("+=", output)) split = SplitByString("+=", output);
+                                                else if( Contains("-=", output)) split = SplitByString("-=", output);
+                                                else if( Contains("*=", output)) split = SplitByString("*=", output);
+                                                else if( Contains("/=", output)) split = SplitByString("/=", output);
+                                                else if( Contains("%=", output)) split = SplitByString("\\%=", output);
+                                                else split = vector<string>();*/
+                                            }else{
+                                                split = Split('=', RemoveCharacter(' ', RemoveCharacter(';', output)), 1);
+                                                string var1 = split[0], var2 = split[1];
+                                                if(!ExistVariable(var1)) throw runtime_error("Error in line "+to_string(line)+"\nOne of the variables do not exists or is incorrect");
+                                                else{
+                                                    // Verify possible operations
+                                                    if(Contains("+", var2) or Contains("-", var2) or Contains("/", var2) or Contains("*", var2) or Contains("%", var2)){
+                                                        // Simple / Complex operations
+                                                        if(ContainsMultipleOperators(var2)){
+                                                            // Complex operations
+                                                            cout << "Complex" <<endl;
+                                                        }else{
+                                                            // Simple operation
+                                                            vector<string> operands = vector<string>();
+                                                            char _operator = 'N';
+                                                            if(Contains("+", var2)) {operands = Split('+', var2); _operator = '+';}
+                                                            else if(Contains("-", var2)) {operands = Split('-', var2); _operator = '-';}
+                                                            else if(Contains("*", var2)) {operands = Split('*', var2); _operator = '*';}
+                                                            else if(Contains("/", var2)) {operands = Split('/', var2); _operator = '/';}
+                                                            else if(Contains("%", var2)) {operands = Split('%', var2); _operator = '%';}
+                                                            if(!VerifySingleOperation(operands[0], operands[1], _operator)) throw runtime_error("Error in line "+to_string(line)+"\nThe operation is incorrect, must be casted");
+                                                        }
+                                                    }else{
+                                                        // Basic assignation
+                                                        if(!ExistVariable(var2)) throw runtime_error("Error in line "+to_string(line)+"\nOne of the variables do not exists or is incorrect");
+                                                    }
+                                                }
                                             }
                                         }else{
-                                            if()
-                                            throw runtime_error("Error in line "+to_string(line)+"\nThe datatype: "+split[0]+" do not exists");
+                                            // Verify variable operations ++ --
+                                            // Verify outputs or inputs
+                                            if(Contains("cout", output)){
+                                                if(!Contains("<<", output)) throw runtime_error("Error in line "+to_string(line)+"Must have << operand");
+                                                else{
+                                                    // Verify content of cout instance
+                                                }
+                                            }else if(Contains("cin", output)){
+                                                if(!Contains(">>", output)) throw runtime_error("Error in line "+to_string(line)+"Must have >> operand");
+                                                else{
+                                                    // Verify content of cin instance
+                                                }
+                                            }else{
+                                                if(Contains("++", output) or Contains("--", output)){
+                                                    string sample = VerifyIncrement(output);
+                                                    if(sample.size() > 0) throw runtime_error("Error in line "+to_string(line)+": "+sample);
+                                                }else{
+                                                    throw runtime_error("Error in line "+to_string(line)+"\nThe datatype: "+split[0]+" do not exists");
+                                                }
+                                            }
                                         }
                                     }
                                 }else if(Contains("{", output)){
@@ -446,6 +601,7 @@ auto ReadFile(string fileName) -> bool{
                         }
                     }
                     else{
+                        if(Contains("//", output)){}
                         if(Contains("*/", output)) comment = false;
                     }
                 }
