@@ -444,6 +444,18 @@ auto VerifyStructControl(string line) -> pair<string, bool>{
     return pair<string, bool>("", false);
     //if(Contains("if(")) return pair<string, bool>("if", true);
 }
+auto EvaluateStructControl(string line) -> string{
+    if(line == "if"){
+        // Evaluate condition
+        line = 
+        if(Contains("{", line)){
+            
+        }else{
+
+        }
+    }
+    return "";
+}
 auto ReadFile(string fileName) -> bool{
     bool existMain = false, isFunction = false;
     int line = 1, openKey = 0;
@@ -505,7 +517,14 @@ auto ReadFile(string fileName) -> bool{
                                 // Evaluate control structures
                                 pair<string, bool> control = VerifyStructControl(output);
                                 if(control.second){
-                                    cout << control.first << endl;
+                                    string controlName = control.first;
+                                    if(controlName == "if"){
+                                        if(Contains("{", output)){
+
+                                        }else{
+
+                                        }
+                                    }
                                 }
                                 // Evaluate content of a function
                                 else if(Contains(";", output)){

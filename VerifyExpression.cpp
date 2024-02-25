@@ -26,6 +26,18 @@ auto Split(string separator, string content) -> vector<string>{
     splits.push_back(buffer);
     return splits;
 }
+auto Replace(string original, string replace, string text) -> string{
+    string buffer = "";
+    int j = 0, k = 0;
+    for(int i = 0 ; i < text.size() ; i++){
+        if(text[i] == original[0]){
+            int m = 0;
+            for(m = 0 ; m < original.size(); m++) if(original[m] != text[i + m]) break;
+            
+        }
+        buffer 
+    }
+}
 auto main()->int{
     string input = "s";
     //cin>>input;
